@@ -1,13 +1,14 @@
-import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthStack } from './auth/AuthStack';
 import { MainStack } from './main/MainStack';
+import { useAuth } from '../contexts/auth/auth.context';
 
 const Navigation = () => {
-  const [isLogged, setIsLogged] = useState(true);
+  const { loggedIn } = useAuth();
+
   return (
     <NavigationContainer>
-      {isLogged ? <MainStack /> : <AuthStack />}
+      {loggedIn ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

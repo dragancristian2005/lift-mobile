@@ -69,7 +69,7 @@ const HomeScreen = () => {
                 <BackMusclesSvg
                   height={svgHeight}
                   width={svgWidth}
-                  muscles={weeklyProgress!.data}
+                  muscles={weeklyProgress.data}
                 />
               )}
             </>

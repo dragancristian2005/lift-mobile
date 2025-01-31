@@ -1,9 +1,20 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import { useState } from 'react';
 import { useUserInfo } from '../hooks/api/useUserInfo';
 
 const ImagePickerComponent = () => {
+  const { data, refetch, isError, isPending } = useUserInfo();
+  const [loading, setLoading] = useState(false);
+
   const updateProfilePicture = async (image: any) => {
     try {
       const fileUri: string = image.uri;
@@ -14,7 +25,10 @@ const ImagePickerComponent = () => {
         name: 'avatar.jpg',
         type: 'image/jpeg',
       } as any);
-      await axios.post('/auth/profile-picture', formData);
+      setLoading(true);
+      await axios.post('/auth/profile-picture', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
     } catch (error) {
       console.error('Error uploading file:', error);
     }
@@ -34,22 +48,30 @@ const ImagePickerComponent = () => {
 
     if (!result.canceled) {
       await updateProfilePicture(result.assets[0]);
+      await refetch();
+      setLoading(false);
     }
   };
-
-  const { data } = useUserInfo();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={pickImage} style={styles.imgBtn}>
-        <Image
-          source={{
-            uri: data?.avatar?.filePath
-              ? `http://192.168.1.4:3000/${data.avatar.filePath}`
-              : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg',
-          }}
-          style={styles.image}
-        />
+        {isError ? (
+          <Text>Error fetching avatar</Text>
+        ) : isPending ? (
+          <Text>Loading...</Text>
+        ) : loading ? (
+          <ActivityIndicator size="large" color="#2e1aa9" />
+        ) : (
+          <Image
+            source={{
+              uri: data?.avatar?.filePath
+                ? `http://192.168.1.4:3000/${data.avatar.filePath}`
+                : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg',
+            }}
+            style={styles.image}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );

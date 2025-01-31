@@ -1,6 +1,6 @@
 export type TabsParamList = {
-  HomeScreen: undefined;
-  LiftScreen: undefined;
-  StreakScreen: undefined;
-  SettingsScreen: undefined;
+  Home: undefined;
+  Lift: undefined;
+  Streak: undefined;
+  Settings: undefined;
 };

@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -32,7 +33,7 @@ const LoginScreen = () => {
           signIn(data.access_token);
         });
     } else {
-      throw new Error('All fields must be filled!');
+      Alert.alert('All fields must be filled!');
     }
   };
 

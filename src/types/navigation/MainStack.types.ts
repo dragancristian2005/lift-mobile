@@ -1,5 +1,5 @@
 export type MainStackParamList = {
   Tabs: undefined;
   CreateWorkoutScreen: undefined;
-  WorkoutScreen: { id: string };
+  WorkoutScreen: { id: string; name: string };
 };

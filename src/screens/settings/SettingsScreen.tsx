@@ -77,7 +77,6 @@ const SettingsScreen = () => {
           <Text style={styles.title}>Settings</Text>
           <ImagePickerComponent />
           <Text style={styles.greeting}>Hello, {data?.username}</Text>
-          <Button title="save" onPress={handleSave} />
           <View style={styles.options}>
             <View style={styles.optionBtn}>
               <Text style={styles.optionBtnTxt}>Theme</Text>
@@ -88,8 +87,8 @@ const SettingsScreen = () => {
                 trackColor={{ false: '#767577', true: '#363636' }}
               />
             </View>
-            <View style={styles.optionBtn}>
-              <Text style={styles.optionBtnTxt}>Weight</Text>
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.userInfoTxt}>Weight</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.weight}
@@ -105,8 +104,8 @@ const SettingsScreen = () => {
                 <Text style={styles.unitText}>kg</Text>
               </View>
             </View>
-            <View style={styles.optionBtn}>
-              <Text style={styles.optionBtnTxt}>Body Fat</Text>
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.userInfoTxt}>Body Fat</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.bodyFat}
@@ -122,8 +121,8 @@ const SettingsScreen = () => {
                 <Text style={styles.unitText}>%</Text>
               </View>
             </View>
-            <View style={styles.optionBtn}>
-              <Text style={styles.optionBtnTxt}>Goal Weight</Text>
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.userInfoTxt}>Goal Weight</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.goalWeight}
@@ -139,8 +138,8 @@ const SettingsScreen = () => {
                 <Text style={styles.unitText}>kg</Text>
               </View>
             </View>
-            <View style={styles.optionBtn}>
-              <Text style={styles.optionBtnTxt}>Goal Body Fat</Text>
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.userInfoTxt}>Goal Body Fat</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.goalBodyFat}
@@ -156,6 +155,9 @@ const SettingsScreen = () => {
                 <Text style={styles.unitText}>%</Text>
               </View>
             </View>
+            <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
+              <Text style={{ color: 'white' }}>Save Changes</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn} onPress={signOut}>
               <Text style={styles.optionBtnTxt}>Log Out</Text>
             </TouchableOpacity>
@@ -184,7 +186,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     borderTopWidth: 2,
-    borderColor: 'rgba(46,26,169,0.5)',
+    borderBottomWidth: 2,
+    borderColor: '#2e1aa9',
+    marginBottom: 12,
   },
   optionBtnTxt: {
     fontSize: 22,
@@ -214,6 +218,25 @@ const styles = StyleSheet.create({
   unitText: {
     marginLeft: 5,
     fontSize: 18,
+  },
+  saveBtn: {
+    width: '35%',
+    padding: 10,
+    backgroundColor: '#2e1aa9',
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  userInfoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  userInfoTxt: {
+    fontSize: 20,
+    paddingVertical: 10,
   },
 });
 

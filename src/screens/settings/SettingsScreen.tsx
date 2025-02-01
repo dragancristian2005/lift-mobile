@@ -1,5 +1,4 @@
 import {
-  Button,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -100,6 +99,7 @@ const SettingsScreen = () => {
                   }
                   keyboardType="numeric"
                   style={styles.input}
+                  onBlur={handleSave}
                 />
                 <Text style={styles.unitText}>kg</Text>
               </View>
@@ -117,6 +117,7 @@ const SettingsScreen = () => {
                   }
                   keyboardType="numeric"
                   style={styles.input}
+                  onBlur={handleSave}
                 />
                 <Text style={styles.unitText}>%</Text>
               </View>
@@ -134,6 +135,7 @@ const SettingsScreen = () => {
                   }
                   keyboardType="numeric"
                   style={styles.input}
+                  onBlur={handleSave}
                 />
                 <Text style={styles.unitText}>kg</Text>
               </View>
@@ -151,13 +153,11 @@ const SettingsScreen = () => {
                   }
                   keyboardType="numeric"
                   style={styles.input}
+                  onBlur={handleSave}
                 />
                 <Text style={styles.unitText}>%</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
-              <Text style={{ color: 'white' }}>Save Changes</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn} onPress={signOut}>
               <Text style={styles.optionBtnTxt}>Log Out</Text>
             </TouchableOpacity>
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: '#2e1aa9',
     marginBottom: 12,
+    marginTop: 12,
   },
   optionBtnTxt: {
     fontSize: 22,

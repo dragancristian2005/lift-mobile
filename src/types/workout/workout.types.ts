@@ -20,12 +20,21 @@ export interface Workout {
 }
 
 type WorkoutScreenRouteProp = RouteProp<
-  { WorkoutScreen: { id: string; name: string } },
+  {
+    WorkoutScreen: {
+      id: string;
+      name: string;
+      date: string;
+      duration: string;
+      totalWeight: string;
+    };
+  },
   'WorkoutScreen'
 >;
 
 export interface WorkoutScreenProps {
   route: WorkoutScreenRouteProp;
+  navigation: NavigationProp<MainStackParamList>;
 }
 
 export interface KWorkoutPops {

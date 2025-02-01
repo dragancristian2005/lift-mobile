@@ -44,11 +44,12 @@ const LiftScreen = () => {
             data={filteredWorkouts}
             renderItem={({ item, index }) => (
               <View
-                style={
+                style={[
                   index === filteredWorkouts.length - 1
                     ? { marginBottom: 75 }
-                    : {}
-                }>
+                    : {},
+                  { marginHorizontal: 3 },
+                ]}>
                 <KWorkout navigation={navigation} item={item} />
               </View>
             )}

@@ -51,6 +51,9 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
           navigation.navigate('WorkoutScreen', {
             id: item.id,
             name: item.name,
+            date: formattedDate,
+            duration: workoutDuration,
+            totalWeight,
           })
         }>
         <Text style={styles.workoutName}>{item.name}</Text>

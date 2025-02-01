@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CreateWorkoutScreen, WorkoutScreen } from '../../screens';
 import { Tabs } from '../tabs/Tabs';
 import { MainStackParamList } from '../../types/navigation/MainStack.types';
+import ExerciseDetailsModal from '../../screens/workout/ExerciseDetailsModal';
 
 const AppStackNavigator = createNativeStackNavigator<MainStackParamList>();
 
@@ -12,6 +13,11 @@ export const MainStack = () => (
     <AppStackNavigator.Screen
       name="CreateWorkoutScreen"
       component={CreateWorkoutScreen}
+    />
+    <AppStackNavigator.Screen
+      name="ExerciseDetailsModal"
+      component={ExerciseDetailsModal}
+      options={{ presentation: 'modal', title: 'Exercise Details' }}
     />
   </AppStackNavigator.Navigator>
 );

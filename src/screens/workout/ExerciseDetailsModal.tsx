@@ -1,5 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import { ExerciseDetailsModalProps } from '../../types/navigation/WorkoutStack.types';
 
 const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
@@ -7,6 +14,8 @@ const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
 }) => {
   const { name, image, difficulty, demonstrationGif, description, type } =
     route.params;
+
+  const [loading, setLoading] = useState(true);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -25,6 +34,7 @@ const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
         resizeMode="cover"
       />
       <Text style={styles.info}>{description}</Text>
+      {loading && <ActivityIndicator size="large" color="#2e1aa9" />}
       <Image
         source={{ uri: demonstrationGif }}
         style={{
@@ -34,6 +44,7 @@ const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
           marginBottom: 25,
         }}
         resizeMode="cover"
+        onLoad={() => setLoading(false)}
       />
     </ScrollView>
   );

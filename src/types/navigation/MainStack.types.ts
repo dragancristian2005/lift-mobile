@@ -10,5 +10,10 @@ export type MainStackParamList = {
   };
   ExerciseDetailsModal: {
     name: string;
+    image: string;
+    difficulty: string;
+    demonstrationGif: string;
+    description: string;
+    type: string;
   };
 };

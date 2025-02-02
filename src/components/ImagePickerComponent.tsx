@@ -66,7 +66,7 @@ const ImagePickerComponent = () => {
           <Image
             source={{
               uri: data?.avatar?.filePath
-                ? `http://192.168.1.4:3000/${data.avatar.filePath}`
+                ? `http://192.168.100.74:3000/${data.avatar.filePath}`
                 : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg',
             }}
             style={styles.image}

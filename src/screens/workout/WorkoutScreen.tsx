@@ -18,14 +18,14 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
   const { data, isPending, isError } = useWorkoutInfo(id);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const filteredExercises = data?.workoutExercise.filter(
-    (item: { exercise: { name: string } }) =>
+  const filteredExercises =
+    data?.workoutExercise.filter((item: { exercise: { name: string } }) =>
       item.exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    ) || [];
 
   return (
     <KContainer>
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', marginBottom: 50 }}>
         <Text style={styles.workoutName}>{name}</Text>
         <View style={styles.workoutInfoContainer}>
           <Text style={styles.subtitle}>Workout Details: </Text>
@@ -55,6 +55,8 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
               <Text>There was an error fetching workout info.</Text>
             ) : isPending ? (
               <Text>Loading...</Text>
+            ) : filteredExercises.length === 0 ? (
+              <Text>No exercises found.</Text>
             ) : (
               <FlatList
                 data={filteredExercises}
@@ -63,14 +65,18 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
                     onPress={() =>
                       navigation.navigate('ExerciseDetailsModal', {
                         name: item.exercise.name,
+                        image: item.exercise.image,
+                        difficulty: item.exercise.difficulty,
+                        demonstrationGif: item.exercise.demonstrationGif,
+                        description: item.exercise.description,
+                        type: item.exercise.type,
                       })
-                    }
-                    key={item.exercise.id}>
+                    }>
                     <KWorkoutInfo item={item} />
                   </TouchableOpacity>
                 )}
                 keyExtractor={item => item.exercise.id}
-                style={{ width: '95%' }}
+                style={{ width: '100%' }}
                 showsVerticalScrollIndicator={false}
                 onScroll={() => Keyboard.dismiss()}
                 scrollEventThrottle={16}

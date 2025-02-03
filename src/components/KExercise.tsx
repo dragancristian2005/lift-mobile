@@ -1,7 +1,18 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { Exercise } from '../types/exercise/Exercise.types';
 
-const KExercise = ({ item }: Exercise) => (
+interface KExerciseProps {
+  item: Exercise;
+  workoutExercises: string[];
+  setWorkoutExercises: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const KExercise = ({
+  item,
+  workoutExercises,
+  setWorkoutExercises,
+}: KExerciseProps) => (
   <View style={styles.container}>
     <View style={styles.exerciseInfo}>
       <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -21,7 +32,15 @@ const KExercise = ({ item }: Exercise) => (
         </View>
       </View>
       <View style={styles.addBtnContainer}>
-        <TouchableOpacity style={styles.addBtn}>
+        <TouchableOpacity
+          style={styles.addBtn}
+          onPress={() => {
+            if (workoutExercises.includes(item.id)) {
+              alert('This exercise is already in your workout!');
+            } else {
+              setWorkoutExercises(prev => [...prev, item.id]);
+            }
+          }}>
           <Text style={styles.addBtnTxt}>+</Text>
         </TouchableOpacity>
       </View>

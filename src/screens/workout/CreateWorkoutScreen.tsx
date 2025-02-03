@@ -17,6 +17,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
 }) => {
   const [workoutName, setWorkoutName] = useState('');
+  const [workoutExercises, setWorkoutExercises] = useState<string[]>([]);
 
   const {
     data,
@@ -38,9 +39,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
     <KContainer>
       <View style={styles.container}>
         <Text style={styles.title}>Create Workout</Text>
-        <Text style={{ alignSelf: 'flex-start', fontSize: 22 }}>
-          Workout Details:{' '}
-        </Text>
+        <Text style={styles.subtitle}>Workout Details: </Text>
         <View style={styles.inputContainer}>
           <Text style={{ fontSize: 18, color: '#444' }}>Workout Name: </Text>
           <TextInput
@@ -50,9 +49,19 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             style={styles.nameInput}
           />
         </View>
-        <Text style={{ alignSelf: 'flex-start', fontSize: 22 }}>
-          Exercises:
-        </Text>
+        <Text style={styles.subtitle}>Workout Exercises: </Text>
+        {workoutExercises.length === 0 ? (
+          <Text>There are no exercises in your workout.</Text>
+        ) : (
+          <FlatList
+            data={workoutExercises}
+            renderItem={({ item }) => <Text>{item}</Text>}
+            keyExtractor={item => item}
+            style={{ width: '100%', height: '50%' }}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+        <Text style={styles.subtitle}>Exercises:</Text>
         {isError ? (
           <Text>There was an error fetching the exercises.</Text>
         ) : isPending ? (
@@ -74,7 +83,11 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
                     type: item.type,
                   })
                 }>
-                <KExercise item={item} />
+                <KExercise
+                  item={item}
+                  workoutExercises={workoutExercises}
+                  setWorkoutExercises={setWorkoutExercises}
+                />
               </TouchableOpacity>
             )}
             keyExtractor={item => item.id}
@@ -120,6 +133,10 @@ const styles = StyleSheet.create({
     shadowRadius: 2.22,
 
     elevation: 3,
+  },
+  subtitle: {
+    alignSelf: 'flex-start',
+    fontSize: 22,
   },
 });
 

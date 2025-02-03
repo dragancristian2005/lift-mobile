@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-const getWorkouts = ({ pageParam }: { pageParam: number }) =>
-  axios
-    .get(`/workouts/user-workouts?limit=5&page=${pageParam}`)
-    .then(res => res.data);
+const getExercises = ({ pageParam }: { pageParam: number }) =>
+  axios.get(`/exercises?page=${pageParam}&limit=5`).then(res => res.data);
 
-export const useWorkouts = () =>
+export const useExercises = () =>
   useInfiniteQuery({
-    queryKey: ['workouts'],
-    queryFn: getWorkouts,
+    queryKey: ['exercises'],
+    queryFn: getExercises,
     initialPageParam: 1,
     getNextPageParam: (_lastPage, allPages) => {
       if (allPages.length < 6) {

@@ -37,6 +37,10 @@ export interface WorkoutScreenProps {
   navigation: NavigationProp<MainStackParamList>;
 }
 
+export interface CreateWorkoutScreenProps {
+  navigation: NavigationProp<MainStackParamList>;
+}
+
 export interface KWorkoutPops {
   navigation: NavigationProp<MainStackParamList>;
   item: Workout;

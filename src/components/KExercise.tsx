@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { Exercise } from '../types/exercise/Exercise.types';
+import { AddedExercise, Exercise } from '../types/exercise/Exercise.types';
 
 interface KExerciseProps {
   item: Exercise;
-  workoutExercises: string[];
-  setWorkoutExercises: React.Dispatch<React.SetStateAction<string[]>>;
+  workoutExercises: AddedExercise[];
+  setWorkoutExercises: React.Dispatch<React.SetStateAction<AddedExercise[]>>;
 }
 
 const KExercise = ({
@@ -35,10 +35,13 @@ const KExercise = ({
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => {
-            if (workoutExercises.includes(item.id)) {
+            if (workoutExercises.some(exercise => exercise.id === item.id)) {
               alert('This exercise is already in your workout!');
             } else {
-              setWorkoutExercises(prev => [...prev, item.id]);
+              setWorkoutExercises(prev => [
+                ...prev,
+                { id: item.id, name: item.name, sets: [] },
+              ]);
             }
           }}>
           <Text style={styles.addBtnTxt}>+</Text>
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     alignSelf: 'center',
-    borderRadius: '50%',
+    borderRadius: 40 / 2,
   },
   addBtnContainer: {
     justifyContent: 'center',

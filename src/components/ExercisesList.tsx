@@ -11,13 +11,13 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import KExercise from './KExercise';
 import { MainStackParamList } from '../types/navigation/MainStack.types';
-import { Exercise } from '../types/exercise/Exercise.types';
+import { AddedExercise, Exercise } from '../types/exercise/Exercise.types';
 
 interface ExercisesListProps {
   allExercises: Exercise[];
   navigation: NavigationProp<MainStackParamList>;
-  workoutExercises: string[];
-  setWorkoutExercises: Dispatch<SetStateAction<string[]>>;
+  workoutExercises: AddedExercise[];
+  setWorkoutExercises: Dispatch<SetStateAction<AddedExercise[]>>;
   loadMoreWorkouts: () => void;
 }
 

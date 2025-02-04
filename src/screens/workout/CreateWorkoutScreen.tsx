@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -11,12 +12,14 @@ import { KContainer } from '../../components';
 import { useExercises } from '../../hooks/api/useExercises';
 import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
 import ExercisesList from '../../components/ExercisesList';
+import { AddedExercise } from '../../types/exercise/Exercise.types';
+import KAddedExercisesList from '../../components/KAddedExercisesList';
 
 const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
 }) => {
   const [workoutName, setWorkoutName] = useState('');
-  const [workoutExercises, setWorkoutExercises] = useState<string[]>([]);
+  const [workoutExercises, setWorkoutExercises] = useState<AddedExercise[]>([]);
 
   const {
     data,
@@ -48,18 +51,35 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             style={styles.nameInput}
           />
         </View>
+        <View style={styles.controls}>
+          <TouchableOpacity style={styles.createBtn}>
+            <Text style={styles.createBtnTxt}>Create Workout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.clearBtn}
+            onPress={() => setWorkoutExercises([])}>
+            <Text style={styles.clearBtnTxt}>Clear</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.subtitle}>Workout Exercises: </Text>
-        {workoutExercises.length === 0 ? (
-          <Text>There are no exercises in your workout.</Text>
-        ) : (
-          <FlatList
-            data={workoutExercises}
-            renderItem={({ item }) => <Text>{item}</Text>}
-            keyExtractor={item => item}
-            style={{ width: '100%' }}
-            showsVerticalScrollIndicator={false}
-          />
-        )}
+        <View style={{ width: '100%', maxHeight: '20%' }}>
+          {workoutExercises.length === 0 ? (
+            <Text>There are no exercises in your workout.</Text>
+          ) : (
+            <FlatList
+              data={workoutExercises}
+              renderItem={({ item }) => (
+                <KAddedExercisesList
+                  item={item}
+                  setWorkoutExercises={setWorkoutExercises}
+                />
+              )}
+              keyExtractor={(item, index) => `${item.id}-${index}`}
+              style={{ width: '100%' }}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
+        </View>
         <Text style={styles.subtitle}>Exercises:</Text>
         {isError ? (
           <Text>There was an error fetching the exercises.</Text>
@@ -107,6 +127,35 @@ const styles = StyleSheet.create({
   subtitle: {
     alignSelf: 'flex-start',
     fontSize: 22,
+  },
+  controls: {
+    flexDirection: 'row',
+    width: '95%',
+    height: 30,
+    gap: 5,
+    justifyContent: 'center',
+  },
+  clearBtn: {
+    backgroundColor: '#2e1aa9',
+    width: '20%',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  clearBtnTxt: {
+    color: '#fff',
+    fontWeight: '500',
+  },
+  createBtn: {
+    backgroundColor: '#2e1aa9',
+    width: '80%',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createBtnTxt: {
+    color: '#fff',
+    fontWeight: '500',
   },
 });
 

@@ -4,14 +4,13 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useState } from 'react';
 import { KContainer } from '../../components';
 import { useExercises } from '../../hooks/api/useExercises';
-import KExercise from '../../components/KExercise';
 import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
+import ExercisesList from '../../components/ExercisesList';
 
 const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
@@ -57,7 +56,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             data={workoutExercises}
             renderItem={({ item }) => <Text>{item}</Text>}
             keyExtractor={item => item}
-            style={{ width: '100%', height: '50%' }}
+            style={{ width: '100%' }}
             showsVerticalScrollIndicator={false}
           />
         )}
@@ -69,32 +68,12 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         ) : allExercises.length === 0 ? (
           <Text>No exercises available.</Text>
         ) : (
-          <FlatList
-            data={allExercises}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('ExerciseDetailsModal', {
-                    name: item.name,
-                    image: item.image,
-                    difficulty: item.difficulty,
-                    demonstrationGif: item.demonstrationGif,
-                    description: item.description,
-                    type: item.type,
-                  })
-                }>
-                <KExercise
-                  item={item}
-                  workoutExercises={workoutExercises}
-                  setWorkoutExercises={setWorkoutExercises}
-                />
-              </TouchableOpacity>
-            )}
-            keyExtractor={item => item.id}
-            style={{ width: '100%' }}
-            showsVerticalScrollIndicator={false}
-            onEndReached={loadMoreWorkouts}
-            onEndReachedThreshold={0.5}
+          <ExercisesList
+            allExercises={allExercises}
+            navigation={navigation}
+            workoutExercises={workoutExercises}
+            setWorkoutExercises={setWorkoutExercises}
+            loadMoreWorkouts={loadMoreWorkouts}
           />
         )}
       </View>
@@ -120,19 +99,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   nameInput: {
-    backgroundColor: 'white',
     borderRadius: 8,
+    height: 30,
     padding: 5,
-    width: '50%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
+    width: '55%',
   },
   subtitle: {
     alignSelf: 'flex-start',

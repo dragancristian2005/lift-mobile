@@ -62,7 +62,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
           </TouchableOpacity>
         </View>
         <Text style={styles.subtitle}>Workout Exercises: </Text>
-        <View style={{ width: '100%', maxHeight: '20%' }}>
+        <View style={{ width: '100%', maxHeight: '23%' }}>
           {workoutExercises.length === 0 ? (
             <Text>There are no exercises in your workout.</Text>
           ) : (

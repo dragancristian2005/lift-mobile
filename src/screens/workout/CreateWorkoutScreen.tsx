@@ -46,6 +46,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
       alert('You must add exercises to your workout!');
     } else {
       createWorkout.mutate({ workoutName, workoutExercises });
+      navigation.goBack();
     }
   };
 

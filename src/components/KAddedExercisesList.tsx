@@ -137,9 +137,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 8,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
   },
   input: {
     paddingHorizontal: 10,

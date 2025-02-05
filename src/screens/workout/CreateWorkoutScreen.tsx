@@ -14,6 +14,7 @@ import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
 import ExercisesList from '../../components/ExercisesList';
 import { AddedExercise } from '../../types/exercise/Exercise.types';
 import KAddedExercisesList from '../../components/KAddedExercisesList';
+import { useSetCreateWorkout } from '../../hooks/api/setCreateWorkout';
 
 const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
@@ -30,10 +31,21 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
     fetchNextPage,
   } = useExercises();
   const allExercises = data?.pages.flatMap(page => page) || [];
+  const createWorkout = useSetCreateWorkout();
 
   const loadMoreWorkouts = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
+    }
+  };
+
+  const handleCreate = () => {
+    if (workoutName === '') {
+      alert('You must give your workout a name!');
+    } else if (workoutExercises.length === 0) {
+      alert('You must add exercises to your workout!');
+    } else {
+      createWorkout.mutate({ workoutName, workoutExercises });
     }
   };
 
@@ -52,7 +64,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
           />
         </View>
         <View style={styles.controls}>
-          <TouchableOpacity style={styles.createBtn}>
+          <TouchableOpacity style={styles.createBtn} onPress={handleCreate}>
             <Text style={styles.createBtnTxt}>Create Workout</Text>
           </TouchableOpacity>
           <TouchableOpacity

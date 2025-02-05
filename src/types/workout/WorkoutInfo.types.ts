@@ -1,3 +1,5 @@
+import { AddedExercise } from '../exercise/Exercise.types';
+
 export type WorkoutInfo = {
   item: {
     exercise: {
@@ -14,4 +16,9 @@ export type WorkoutInfo = {
       weight: number;
     }[];
   };
+};
+
+export type CreateWorkout = {
+  workoutName: string;
+  workoutExercises: AddedExercise[];
 };

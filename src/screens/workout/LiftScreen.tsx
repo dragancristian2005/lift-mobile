@@ -41,7 +41,7 @@ const LiftScreen = () => {
           <Text>No workouts available.</Text>
         ) : (
           <FlatList
-            data={filteredWorkouts}
+            data={filteredWorkouts.reverse()}
             renderItem={({ item, index }) => (
               <View
                 style={[

@@ -21,4 +21,6 @@ export type WorkoutInfo = {
 export type CreateWorkout = {
   workoutName: string;
   workoutExercises: AddedExercise[];
+  startTime: Date;
+  endTime: Date;
 };

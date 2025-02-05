@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,7 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { formatDuration, intervalToDuration } from 'date-fns';
 import { KContainer } from '../../components';
 import { useExercises } from '../../hooks/api/useExercises';
 import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
@@ -19,8 +21,11 @@ import { useSetCreateWorkout } from '../../hooks/api/setCreateWorkout';
 const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
 }) => {
+  const queryClient = useQueryClient();
   const [workoutName, setWorkoutName] = useState('');
   const [workoutExercises, setWorkoutExercises] = useState<AddedExercise[]>([]);
+  const [startTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   const {
     data,
@@ -33,30 +38,51 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   const allExercises = data?.pages.flatMap(page => page) || [];
   const createWorkout = useSetCreateWorkout();
 
-  const loadMoreWorkouts = () => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setEndTime(new Date());
+    }, 1000);
 
-  const handleCreate = () => {
-    if (workoutName === '') {
+    return () => clearInterval(timer);
+  }, []);
+
+  const workoutDuration = useMemo(() => {
+    const duration = intervalToDuration({
+      start: startTime,
+      end: endTime,
+    });
+
+    return formatDuration(duration, {
+      format: ['hours', 'minutes', 'seconds'],
+    });
+  }, [endTime, startTime]);
+
+  const handleCreate = async () => {
+    if (!workoutName.trim()) {
       alert('You must give your workout a name!');
-    } else if (workoutExercises.length === 0) {
-      alert('You must add exercises to your workout!');
-    } else {
-      createWorkout.mutate({ workoutName, workoutExercises });
-      navigation.goBack();
+      return;
     }
+    if (workoutExercises.length === 0) {
+      alert('You must add exercises to your workout!');
+      return;
+    }
+
+    await createWorkout.mutateAsync({
+      workoutName,
+      workoutExercises,
+      startTime,
+      endTime,
+    });
+    await queryClient.invalidateQueries({ queryKey: ['weekly-progress'] });
+    navigation.goBack();
   };
 
   return (
     <KContainer>
       <View style={styles.container}>
-        <Text style={styles.title}>Create Workout</Text>
-        <Text style={styles.subtitle}>Workout Details: </Text>
+        <Text style={styles.title}>New Workout</Text>
         <View style={styles.inputContainer}>
-          <Text style={{ fontSize: 18, color: '#444' }}>Workout Name: </Text>
+          <Text style={{ fontSize: 20, color: '#444' }}>Workout Name: </Text>
           <TextInput
             value={workoutName}
             onChangeText={setWorkoutName}
@@ -66,7 +92,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
         </View>
         <View style={styles.controls}>
           <TouchableOpacity style={styles.createBtn} onPress={handleCreate}>
-            <Text style={styles.createBtnTxt}>Create Workout</Text>
+            <Text style={styles.createBtnTxt}>Finish Workout</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.clearBtn}
@@ -74,6 +100,9 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             <Text style={styles.clearBtnTxt}>Clear</Text>
           </TouchableOpacity>
         </View>
+        <Text style={{ fontSize: 18, color: '#444' }}>
+          Duration: {workoutDuration}
+        </Text>
         <Text style={styles.subtitle}>Workout Exercises: </Text>
         <View style={{ width: '100%', maxHeight: '23%' }}>
           {workoutExercises.length === 0 ? (
@@ -106,7 +135,11 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             navigation={navigation}
             workoutExercises={workoutExercises}
             setWorkoutExercises={setWorkoutExercises}
-            loadMoreWorkouts={loadMoreWorkouts}
+            loadMoreWorkouts={() => {
+              if (hasNextPage && !isFetchingNextPage) {
+                fetchNextPage();
+              }
+            }}
           />
         )}
       </View>
@@ -118,7 +151,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    gap: 20,
+    gap: 15,
     paddingHorizontal: 15,
   },
   title: {
@@ -128,18 +161,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    marginBottom: 10,
   },
   nameInput: {
-    borderRadius: 8,
     height: 30,
     padding: 5,
-    width: '55%',
+    fontSize: 20,
   },
   subtitle: {
     alignSelf: 'flex-start',
-    fontSize: 22,
+    fontSize: 20,
   },
   controls: {
     flexDirection: 'row',

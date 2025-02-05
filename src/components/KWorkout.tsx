@@ -38,11 +38,9 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
       start: item.date,
       end: item.finished,
     });
-    const formattedDuration = formatDuration(duration, {
+    return formatDuration(duration, {
       format: ['hours', 'minutes'],
     });
-
-    return formattedDuration || 'Not started';
   }, [item.date, item.finished]);
 
   return (

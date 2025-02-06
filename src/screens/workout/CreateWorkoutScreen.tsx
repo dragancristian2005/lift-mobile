@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -104,7 +105,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
           Duration: {workoutDuration}
         </Text>
         <Text style={styles.subtitle}>Workout Exercises: </Text>
-        <View style={{ width: '100%', maxHeight: '23%' }}>
+        <View style={{ width: '100%', maxHeight: '55%' }}>
           {workoutExercises.length === 0 ? (
             <Text>There are no exercises in your workout.</Text>
           ) : (
@@ -122,26 +123,34 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             />
           )}
         </View>
-        <Text style={styles.subtitle}>Exercises:</Text>
-        {isError ? (
-          <Text>There was an error fetching the exercises.</Text>
-        ) : isPending ? (
-          <ActivityIndicator color="#2e1aa9" size="large" />
-        ) : allExercises.length === 0 ? (
-          <Text>No exercises available.</Text>
-        ) : (
-          <ExercisesList
-            allExercises={allExercises}
-            navigation={navigation}
-            workoutExercises={workoutExercises}
-            setWorkoutExercises={setWorkoutExercises}
-            loadMoreWorkouts={() => {
-              if (hasNextPage && !isFetchingNextPage) {
-                fetchNextPage();
+        <View style={{ flex: 1, width: '100%', gap: 15 }}>
+          {isError ? (
+            <Text>There was an error fetching the exercises.</Text>
+          ) : isPending ? (
+            <ActivityIndicator color="#2e1aa9" size="large" />
+          ) : allExercises.length === 0 ? (
+            <Text>No exercises available.</Text>
+          ) : (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ExercisesModal', {
+                  allExercises,
+                  navigation,
+                  workoutExercises,
+                  setWorkoutExercises,
+                  hasNextPage,
+                  isFetchingNextPage,
+                  fetchNextPage,
+                })
               }
-            }}
-          />
-        )}
+              style={styles.addExerciseBtn}>
+              <View style={styles.addExerciseTxtContainer}>
+                <Text style={styles.addExerciseTxt}>+</Text>
+              </View>
+              <Text style={{ fontSize: 14, color: '#666' }}>Add Exercise</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </KContainer>
   );
@@ -199,6 +208,28 @@ const styles = StyleSheet.create({
   createBtnTxt: {
     color: '#fff',
     fontWeight: '500',
+  },
+  addExerciseBtn: {
+    width: '100%',
+    backgroundColor: '#dddddd',
+    height: 90,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 5,
+  },
+  addExerciseTxtContainer: {
+    backgroundColor: '#fff',
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addExerciseTxt: {
+    fontSize: 50,
+    lineHeight: 52,
+    color: '#2e1aa9',
   },
 });
 

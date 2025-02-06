@@ -1,3 +1,7 @@
+import { NavigationProp } from '@react-navigation/native';
+import { Dispatch, SetStateAction } from 'react';
+import { AddedExercise, Exercise } from '../exercise/Exercise.types';
+
 export type MainStackParamList = {
   Tabs: undefined;
   CreateWorkoutScreen: undefined;
@@ -15,5 +19,14 @@ export type MainStackParamList = {
     demonstrationGif: string;
     description: string;
     type: string;
+  };
+  ExercisesModal: {
+    allExercises: Exercise[];
+    navigation: NavigationProp<MainStackParamList>;
+    workoutExercises: AddedExercise[];
+    setWorkoutExercises: Dispatch<SetStateAction<AddedExercise[]>>;
+    hasNextPage: boolean;
+    isFetchingNextPage: boolean;
+    fetchNextPage: () => void;
   };
 };

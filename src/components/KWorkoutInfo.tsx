@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import cuid from 'cuid';
 import KLineDecoration from './KLineDecoration';
 import { WorkoutInfo } from '../types/workout/WorkoutInfo.types';
 
@@ -31,6 +32,7 @@ const KWorkoutInfo = ({ item }: WorkoutInfo) => (
       {item.workoutExerciseSet.map(
         (set: { reps: number; weight: number }, index: number) => (
           <View
+            key={cuid()}
             style={[
               index % 2 !== 0
                 ? { backgroundColor: 'white' }

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -14,7 +13,6 @@ import { formatDuration, intervalToDuration } from 'date-fns';
 import { KContainer } from '../../components';
 import { useExercises } from '../../hooks/api/useExercises';
 import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
-import ExercisesList from '../../components/ExercisesList';
 import { AddedExercise } from '../../types/exercise/Exercise.types';
 import KAddedExercisesList from '../../components/KAddedExercisesList';
 import { useSetCreateWorkout } from '../../hooks/api/setCreateWorkout';
@@ -28,15 +26,6 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   const [startTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
-  const {
-    data,
-    isPending,
-    isError,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useExercises();
-  const allExercises = data?.pages.flatMap(page => page) || [];
   const createWorkout = useSetCreateWorkout();
 
   useEffect(() => {
@@ -105,7 +94,22 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
           Duration: {workoutDuration}
         </Text>
         <Text style={styles.subtitle}>Workout Exercises: </Text>
-        <View style={{ width: '100%', maxHeight: '55%' }}>
+        <View style={{ width: '100%', gap: 15 }}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ExercisesModal', {
+                workoutExercises,
+                setWorkoutExercises,
+              })
+            }
+            style={styles.addExerciseBtn}>
+            <View style={styles.addExerciseTxtContainer}>
+              <Text style={styles.addExerciseTxt}>+</Text>
+            </View>
+            <Text style={{ fontSize: 14, color: '#666' }}>Add Exercise</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ width: '100%', maxHeight: '60%' }}>
           {workoutExercises.length === 0 ? (
             <Text>There are no exercises in your workout.</Text>
           ) : (
@@ -121,34 +125,6 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
               style={{ width: '100%' }}
               showsVerticalScrollIndicator={false}
             />
-          )}
-        </View>
-        <View style={{ flex: 1, width: '100%', gap: 15 }}>
-          {isError ? (
-            <Text>There was an error fetching the exercises.</Text>
-          ) : isPending ? (
-            <ActivityIndicator color="#2e1aa9" size="large" />
-          ) : allExercises.length === 0 ? (
-            <Text>No exercises available.</Text>
-          ) : (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('ExercisesModal', {
-                  allExercises,
-                  navigation,
-                  workoutExercises,
-                  setWorkoutExercises,
-                  hasNextPage,
-                  isFetchingNextPage,
-                  fetchNextPage,
-                })
-              }
-              style={styles.addExerciseBtn}>
-              <View style={styles.addExerciseTxtContainer}>
-                <Text style={styles.addExerciseTxt}>+</Text>
-              </View>
-              <Text style={{ fontSize: 14, color: '#666' }}>Add Exercise</Text>
-            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -212,7 +188,7 @@ const styles = StyleSheet.create({
   addExerciseBtn: {
     width: '100%',
     backgroundColor: '#dddddd',
-    height: 90,
+    height: 70,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -220,15 +196,15 @@ const styles = StyleSheet.create({
   },
   addExerciseTxtContainer: {
     backgroundColor: '#fff',
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   addExerciseTxt: {
-    fontSize: 50,
-    lineHeight: 52,
+    fontSize: 40,
+    lineHeight: 42,
     color: '#2e1aa9',
   },
 });

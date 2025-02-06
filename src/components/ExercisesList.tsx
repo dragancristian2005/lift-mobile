@@ -8,14 +8,13 @@ import {
   View,
 } from 'react-native';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import KExercise from './KExercise';
 import { MainStackParamList } from '../types/navigation/MainStack.types';
 import { AddedExercise, Exercise } from '../types/exercise/Exercise.types';
 
 interface ExercisesListProps {
   allExercises: Exercise[];
-  navigation: NavigationProp<MainStackParamList>;
   workoutExercises: AddedExercise[];
   setWorkoutExercises: Dispatch<SetStateAction<AddedExercise[]>>;
   loadMoreWorkouts: () => void;
@@ -23,12 +22,12 @@ interface ExercisesListProps {
 
 const ExercisesList = ({
   allExercises,
-  navigation,
   workoutExercises,
   setWorkoutExercises,
   loadMoreWorkouts,
 }: ExercisesListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigation = useNavigation<NavigationProp<MainStackParamList>>();
 
   const filteredExercises = allExercises.filter(exercise =>
     exercise.name.toLowerCase().includes(searchQuery.toLowerCase())

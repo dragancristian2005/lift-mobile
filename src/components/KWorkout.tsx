@@ -53,7 +53,7 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
             name: item.name,
             date: formattedDate,
             duration: workoutDuration,
-            totalWeight,
+            totalWeight: totalWeight.toString(),
           })
         }>
         <Text style={styles.workoutName}>{item.name}</Text>

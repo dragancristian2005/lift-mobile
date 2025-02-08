@@ -131,6 +131,7 @@ const KAddedExercisesList = ({
         }>
         <Text style={styles.addSetTxt}>+</Text>
       </TouchableOpacity>
+      <Text style={{ color: '#444', marginTop: 5 }}>Add set</Text>
     </View>
   );
 };

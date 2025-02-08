@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -11,7 +10,6 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { KContainer } from '../../components';
-import { useExercises } from '../../hooks/api/useExercises';
 import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
 import { AddedExercise } from '../../types/exercise/Exercise.types';
 import KAddedExercisesList from '../../components/KAddedExercisesList';

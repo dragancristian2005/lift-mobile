@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { KContainer } from '../../components';
 import ImagePickerComponent from '../../components/ImagePickerComponent';
 import { useAuth } from '../../contexts/auth/auth.context';
@@ -28,6 +29,7 @@ const SettingsScreen = () => {
 
   const { signOut } = useAuth();
   const mutation = useSetUserInfo();
+  const queryClient = useQueryClient();
 
   const toggleSwitch = () => setIsDarkMode(previousState => !previousState);
 
@@ -42,9 +44,13 @@ const SettingsScreen = () => {
       userInfo.goalBodyFat === '' ? undefined : Number(userInfo.goalBodyFat),
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const numericUserInfo = prepareUserInfoForMutation(modifiedUserInfo);
-    mutation.mutate(numericUserInfo);
+    mutation.mutate(numericUserInfo, {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['user-info'] });
+      },
+    });
   };
 
   useEffect(() => {

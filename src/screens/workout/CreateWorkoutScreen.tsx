@@ -61,9 +61,9 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
       startTime,
       endTime,
     });
-    await queryClient.invalidateQueries({
-      queryKey: ['weekly-progress', 'week-streak', 'latest-workout'],
-    });
+    await queryClient.invalidateQueries({ queryKey: ['weekly-progress'] });
+    await queryClient.invalidateQueries({ queryKey: ['week-streak'] });
+    await queryClient.invalidateQueries({ queryKey: ['latest-workout'] });
     navigation.goBack();
   };
 

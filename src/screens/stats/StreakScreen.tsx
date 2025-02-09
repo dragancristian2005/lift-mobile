@@ -10,6 +10,7 @@ import { KContainer } from '../../components';
 import { useWeekStreak } from '../../hooks/api/useWeekStreak';
 import KStreak from '../../components/KStreak';
 import KGoals from '../../components/KGoals';
+import KIntake from '../../components/KIntake';
 
 const StreakScreen = () => {
   const { data, isError, isPending } = useWeekStreak();
@@ -23,7 +24,8 @@ const StreakScreen = () => {
     <KContainer>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ alignItems: 'center' }}>
+        contentContainerStyle={{ alignItems: 'center' }}
+        showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Streak</Text>
         {isError ? (
           <Text>There was an error fetching this week&#39;s streak</Text>
@@ -35,6 +37,10 @@ const StreakScreen = () => {
         <View style={styles.goalsContainer}>
           <Text style={styles.subtitle}>Goals</Text>
           <KGoals />
+        </View>
+        <View style={styles.goalsContainer}>
+          <Text style={styles.subtitle}>Recommended Calorie Intake</Text>
+          <KIntake />
         </View>
       </ScrollView>
     </KContainer>
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   goalsContainer: {
-    marginTop: 25,
+    marginTop: 30,
     width: '100%',
     alignItems: 'center',
   },

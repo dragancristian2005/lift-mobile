@@ -3,10 +3,12 @@ import { format, formatDuration, intervalToDuration } from 'date-fns';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { KWorkoutPops } from '../types/workout/workout.types';
 import { useTheme } from '../contexts/theme/theme.context';
 import DarkTheme from '../theme/DarkTheme';
 import LightTheme from '../theme/LightTheme';
+import { useDeleteWorkout } from '../hooks/api/useDeleteWorkout';
 
 const KWorkout = ({ navigation, item }: KWorkoutPops) => {
   const { isDarkTheme } = useTheme();
@@ -49,6 +51,25 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
     });
   }, [item.date, item.finished]);
 
+  const deleteWorkoutMutation = useDeleteWorkout();
+  const queryClient = useQueryClient();
+
+  const handleDelete = (workoutId: string) => {
+    deleteWorkoutMutation.mutate(workoutId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['weekly-progress'],
+        });
+        queryClient.invalidateQueries({ queryKey: ['week-streak'] });
+        queryClient.invalidateQueries({ queryKey: ['latest-workout'] });
+        queryClient.invalidateQueries({ queryKey: ['workouts'] });
+      },
+      onError: error => {
+        console.error('Failed to delete workout:', error);
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -65,9 +86,28 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
             totalWeight: totalWeight.toString(),
           })
         }>
-        <Text style={[styles.workoutName, { color: currentTheme.colors.text }]}>
-          {item.name}
-        </Text>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={[styles.workoutName, { color: currentTheme.colors.text }]}>
+            {item.name}
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'tomato',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 8,
+              paddingHorizontal: 5,
+            }}
+            onPress={() => handleDelete(item.id)}>
+            <Text style={{ color: '#fff' }}>Delete</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={{ color: currentTheme.colors.text }}>{formattedDate}</Text>
         <View style={styles.workoutInfo}>
           <View

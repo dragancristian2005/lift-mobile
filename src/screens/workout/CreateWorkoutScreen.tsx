@@ -61,15 +61,24 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
       return;
     }
 
-    await createWorkout.mutateAsync({
-      workoutName,
-      workoutExercises,
-      startTime,
-      endTime,
-    });
-    await queryClient.invalidateQueries({ queryKey: ['weekly-progress'] });
-    await queryClient.invalidateQueries({ queryKey: ['week-streak'] });
-    await queryClient.invalidateQueries({ queryKey: ['latest-workout'] });
+    await createWorkout.mutateAsync(
+      {
+        workoutName,
+        workoutExercises,
+        startTime,
+        endTime,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['weekly-progress'],
+          });
+          queryClient.invalidateQueries({ queryKey: ['week-streak'] });
+          queryClient.invalidateQueries({ queryKey: ['latest-workout'] });
+          queryClient.invalidateQueries({ queryKey: ['workouts'] });
+        },
+      }
+    );
     navigation.goBack();
   };
 
@@ -88,7 +97,7 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
             onChangeText={setWorkoutName}
             placeholder="Enter workout name..."
             placeholderTextColor={currentTheme.colors.text}
-            style={styles.nameInput}
+            style={[styles.nameInput, { color: currentTheme.colors.text }]}
           />
         </View>
         <View style={styles.controls}>

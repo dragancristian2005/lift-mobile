@@ -24,7 +24,10 @@ export const KWorkoutControls = ({
         onChangeText={setSearch}
         style={[
           styles.searchBar,
-          { backgroundColor: currentTheme.colors.card },
+          {
+            backgroundColor: currentTheme.colors.card,
+            color: currentTheme.colors.text,
+          },
         ]}
         placeholder="Search"
         placeholderTextColor={currentTheme.colors.text}

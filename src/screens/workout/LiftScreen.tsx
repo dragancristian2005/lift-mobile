@@ -17,9 +17,7 @@ const LiftScreen = () => {
   const workouts = useWorkouts();
 
   const loadMoreWorkouts = () => {
-    console.log('entered');
     if (workouts.hasNextPage && !workouts.isFetchingNextPage) {
-      console.log('Fetching');
       workouts.fetchNextPage();
     }
   };

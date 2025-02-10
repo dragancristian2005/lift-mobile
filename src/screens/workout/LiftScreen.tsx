@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { KContainer } from '../../components';
 import { MainStackParamList } from '../../types/navigation/MainStack.types';
 import KWorkout from '../../components/KWorkout';
@@ -16,17 +16,26 @@ const LiftScreen = () => {
 
   const workouts = useWorkouts();
 
-  const allWorkouts = workouts.data?.pages.flatMap(page => page) || [];
-
-  const filteredWorkouts = allWorkouts.filter(workout =>
-    workout.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   const loadMoreWorkouts = () => {
+    console.log('entered');
     if (workouts.hasNextPage && !workouts.isFetchingNextPage) {
+      console.log('Fetching');
       workouts.fetchNextPage();
     }
   };
+
+  const allWorkouts = useMemo(
+    () => workouts.data?.pages.flatMap(page => page) || [],
+    [workouts.data?.pages]
+  );
+
+  const filteredWorkouts = useMemo(
+    () =>
+      allWorkouts.filter(workout =>
+        workout.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [allWorkouts, search]
+  );
 
   useEffect(() => {
     workouts.refetch();

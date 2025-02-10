@@ -3,8 +3,8 @@ import Svg, { SvgProps, G, Path } from 'react-native-svg';
 
 export const SHADES = {
   0: '#F0F8FF',
-  1: '#B9D9EB',
-  2: '#6CB4EE',
+  1: '#c1b5ff',
+  2: '#7c6aff',
 };
 
 export const FrontMusclesSvg = ({

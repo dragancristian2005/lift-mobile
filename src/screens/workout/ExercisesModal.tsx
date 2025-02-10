@@ -3,8 +3,14 @@ import React from 'react';
 import ExercisesList from '../../components/ExercisesList';
 import { ExerciseModalProps } from '../../types/navigation/WorkoutStack.types';
 import { useExercises } from '../../hooks/api/useExercises';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const ExercisesModal: React.FC<ExerciseModalProps> = ({ route }) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { workoutExercises, setWorkoutExercises } = route.params;
 
   const {
@@ -19,11 +25,20 @@ const ExercisesModal: React.FC<ExerciseModalProps> = ({ route }) => {
 
   return (
     <View style={{ flex: 1, width: '100%', gap: 15, padding: 15 }}>
-      <Text style={{ alignSelf: 'center', fontSize: 24 }}>Exercises:</Text>
+      <Text
+        style={{
+          alignSelf: 'center',
+          fontSize: 24,
+          color: currentTheme.colors.text,
+        }}>
+        Exercises:
+      </Text>
       {isError ? (
-        <Text>There was an error fetching the exercises.</Text>
+        <Text style={{ color: currentTheme.colors.text }}>
+          There was an error fetching the exercises.
+        </Text>
       ) : isPending ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={currentTheme.colors.primary} />
       ) : (
         <ExercisesList
           allExercises={allExercises}

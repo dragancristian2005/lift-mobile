@@ -12,8 +12,14 @@ import { KContainer } from '../../components';
 import { useWorkoutInfo } from '../../hooks/api/useWorkoutInfo';
 import KWorkoutInfo from '../../components/KWorkoutInfo';
 import { WorkoutScreenProps } from '../../types/workout/workout.types';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { id, name, date, duration, totalWeight } = route.params;
   const { data, isPending, isError } = useWorkoutInfo(id);
 
@@ -26,17 +32,29 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
   return (
     <KContainer>
       <View style={{ flex: 1, alignItems: 'center', marginBottom: 50 }}>
-        <Text style={styles.workoutName}>{name}</Text>
+        <Text style={[styles.workoutName, { color: currentTheme.colors.text }]}>
+          {name}
+        </Text>
         <View style={styles.workoutInfoContainer}>
-          <Text style={styles.subtitle}>Workout Details: </Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Workout Details:{' '}
+          </Text>
           <View style={styles.workoutInfo}>
-            <Text style={styles.info}>Date: {date}</Text>
-            <Text style={styles.info}>Duration: {duration}</Text>
-            <Text style={styles.info}>Total Weight: {totalWeight} kg</Text>
+            <Text style={[styles.info, { color: currentTheme.colors.border }]}>
+              Date: {date}
+            </Text>
+            <Text style={[styles.info, { color: currentTheme.colors.border }]}>
+              Duration: {duration}
+            </Text>
+            <Text style={[styles.info, { color: currentTheme.colors.border }]}>
+              Total Weight: {totalWeight} kg
+            </Text>
           </View>
         </View>
         <View style={styles.workoutExerciseContainer}>
-          <Text style={styles.subtitle}>Exercises: </Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Exercises:{' '}
+          </Text>
           <View
             style={{
               justifyContent: 'center',
@@ -44,19 +62,29 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ route, navigation }) => {
               alignItems: 'center',
             }}>
             <TextInput
-              style={styles.searchBar}
+              style={[
+                styles.searchBar,
+                { backgroundColor: currentTheme.colors.card },
+              ]}
               placeholder="Search exercises..."
+              placeholderTextColor={currentTheme.colors.text}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
           </View>
           <View style={styles.workoutExercise}>
             {isError ? (
-              <Text>There was an error fetching workout info.</Text>
+              <Text style={{ color: currentTheme.colors.text }}>
+                There was an error fetching workout info.
+              </Text>
             ) : isPending ? (
-              <Text>Loading...</Text>
+              <Text style={{ color: currentTheme.colors.text }}>
+                Loading...
+              </Text>
             ) : filteredExercises.length === 0 ? (
-              <Text>No exercises found.</Text>
+              <Text style={{ color: currentTheme.colors.text }}>
+                No exercises found.
+              </Text>
             ) : (
               <FlatList
                 data={filteredExercises}
@@ -109,7 +137,6 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 16,
-    color: '#555',
   },
   workoutExerciseContainer: {
     width: '95%',

@@ -8,6 +8,9 @@ import {
 import React, { useState } from 'react';
 import cuid from 'cuid';
 import { AddedExercise } from '../types/exercise/Exercise.types';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 interface KAddedExercisesListProps {
   item: AddedExercise;
@@ -18,25 +21,35 @@ const KAddedExercisesList = ({
   item,
   setWorkoutExercises,
 }: KAddedExercisesListProps) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const [setColors, setSetColors] = useState<Record<string, string>>({});
 
   const toggleColor = (setId: string, index: number) => {
+    const lightGreen = '#b7d0b8';
+    const darkGreen = '#468355';
+
     setSetColors(prevColors => ({
       ...prevColors,
       [setId]:
-        prevColors[setId] === '#b7d0b8'
+        prevColors[setId] === (isDarkTheme ? darkGreen : lightGreen)
           ? index % 2 === 0
-            ? '#cccccc'
+            ? currentTheme.colors.card
             : 'rgba(255, 255, 255, 0)'
-          : '#b7d0b8',
+          : isDarkTheme
+            ? darkGreen
+            : lightGreen,
     }));
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.exerciseName}>{item.name}</Text>
+      <Text style={[styles.exerciseName, { color: currentTheme.colors.text }]}>
+        {item.name}
+      </Text>
       {item.sets.length === 0 ? (
-        <Text>No sets</Text>
+        <Text style={{ color: currentTheme.colors.text }}>No sets</Text>
       ) : (
         <View style={{ gap: 2, marginVertical: 5 }}>
           {item.sets.map((set, index) => (
@@ -46,16 +59,20 @@ const KAddedExercisesList = ({
                 {
                   backgroundColor:
                     setColors[set.id] ||
-                    (index % 2 === 0 ? '#cccccc' : 'rgba(255, 255, 255, 0)'),
+                    (index % 2 === 0
+                      ? currentTheme.colors.card
+                      : 'rgba(255, 255, 255, 0)'),
                 },
                 styles.setsContainer,
               ]}>
-              <Text style={styles.sets}>Set {index + 1}:</Text>
+              <Text style={[styles.sets, { color: currentTheme.colors.text }]}>
+                Set {index + 1}:
+              </Text>
               <View style={{ alignItems: 'center' }}>
-                <Text>Reps:</Text>
+                <Text style={{ color: currentTheme.colors.text }}>Reps:</Text>
                 <TextInput
                   value={set.reps.toString()}
-                  style={styles.input}
+                  style={[styles.input, { color: currentTheme.colors.text }]}
                   keyboardType="numeric"
                   onChangeText={text => {
                     const updatedReps = Number(text) || 0;
@@ -77,10 +94,10 @@ const KAddedExercisesList = ({
                 />
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text>Weight:</Text>
+                <Text style={{ color: currentTheme.colors.text }}>Weight:</Text>
                 <TextInput
                   value={set.weight.toString()}
-                  style={styles.input}
+                  style={[styles.input, { color: currentTheme.colors.text }]}
                   keyboardType="numeric"
                   onChangeText={text => {
                     const updatedWeight = Number(text) || 0;
@@ -113,7 +130,10 @@ const KAddedExercisesList = ({
         </View>
       )}
       <TouchableOpacity
-        style={styles.addSet}
+        style={[
+          styles.addSet,
+          { backgroundColor: currentTheme.colors.primary },
+        ]}
         onPress={() =>
           setWorkoutExercises(prev =>
             prev.map(exercise =>
@@ -129,9 +149,21 @@ const KAddedExercisesList = ({
             )
           )
         }>
-        <Text style={styles.addSetTxt}>+</Text>
+        <Text
+          style={[
+            styles.addSetTxt,
+            { color: currentTheme.colors.notification },
+          ]}>
+          +
+        </Text>
       </TouchableOpacity>
-      <Text style={{ color: '#444', marginTop: 5 }}>Add set</Text>
+      <Text
+        style={{
+          marginTop: 5,
+          color: currentTheme.colors.text,
+        }}>
+        Add set
+      </Text>
     </View>
   );
 };
@@ -146,7 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   addSet: {
-    backgroundColor: '#2e1aa9',
     width: 40,
     height: 40,
     borderRadius: 40 / 2,
@@ -155,7 +186,6 @@ const styles = StyleSheet.create({
   },
   addSetTxt: {
     fontSize: 26,
-    color: '#fff',
     fontWeight: '500',
     textAlign: 'center',
     lineHeight: 28,

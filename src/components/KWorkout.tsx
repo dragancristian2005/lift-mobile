@@ -4,8 +4,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useMemo } from 'react';
 import { KWorkoutPops } from '../types/workout/workout.types';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 const KWorkout = ({ navigation, item }: KWorkoutPops) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const formattedDate = format(new Date(item.date), 'EEEE, dd MMM yyyy');
 
   const exerciseInfo = useMemo(
@@ -46,7 +52,10 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.workoutBtn}
+        style={[
+          styles.workoutBtn,
+          { backgroundColor: currentTheme.colors.card },
+        ]}
         onPress={() =>
           navigation.navigate('WorkoutScreen', {
             id: item.id,
@@ -56,8 +65,10 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
             totalWeight: totalWeight.toString(),
           })
         }>
-        <Text style={styles.workoutName}>{item.name}</Text>
-        <Text style={{ color: '#777' }}>{formattedDate}</Text>
+        <Text style={[styles.workoutName, { color: currentTheme.colors.text }]}>
+          {item.name}
+        </Text>
+        <Text style={{ color: currentTheme.colors.text }}>{formattedDate}</Text>
         <View style={styles.workoutInfo}>
           <View
             style={{
@@ -66,16 +77,30 @@ const KWorkout = ({ navigation, item }: KWorkoutPops) => {
               alignItems: 'center',
             }}>
             <View style={styles.workoutDetails}>
-              <Feather name="clock" size={12} color="#777" />
-              <Text style={{ color: '#777' }}>{workoutDuration}</Text>
+              <Feather
+                name="clock"
+                size={12}
+                color={currentTheme.colors.text}
+              />
+              <Text style={{ color: currentTheme.colors.text }}>
+                {workoutDuration}
+              </Text>
             </View>
             <View style={styles.workoutDetails}>
-              <MaterialCommunityIcons name="weight" size={12} color="#777" />
-              <Text style={{ color: '#777' }}>{totalWeight}</Text>
+              <MaterialCommunityIcons
+                name="weight"
+                size={12}
+                color={currentTheme.colors.text}
+              />
+              <Text style={{ color: currentTheme.colors.text }}>
+                {totalWeight}
+              </Text>
             </View>
           </View>
           <View style={{ flexDirection: 'column', gap: 15 }}>
-            <Text style={{ fontSize: 16 }}>Exercises:</Text>
+            <Text style={{ fontSize: 16, color: currentTheme.colors.text }}>
+              Exercises:
+            </Text>
             {Object.keys(exerciseInfo).map(exercise => (
               <View
                 key={exercise}

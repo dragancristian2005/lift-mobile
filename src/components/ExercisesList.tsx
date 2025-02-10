@@ -12,6 +12,9 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import KExercise from './KExercise';
 import { MainStackParamList } from '../types/navigation/MainStack.types';
 import { AddedExercise, Exercise } from '../types/exercise/Exercise.types';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 interface ExercisesListProps {
   allExercises: Exercise[];
@@ -26,6 +29,9 @@ const ExercisesList = ({
   setWorkoutExercises,
   loadMoreWorkouts,
 }: ExercisesListProps) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const [searchQuery, setSearchQuery] = useState('');
   const navigation = useNavigation<NavigationProp<MainStackParamList>>();
 
@@ -40,15 +46,28 @@ const ExercisesList = ({
           value={searchQuery}
           onChangeText={setSearchQuery}
           placeholder="Enter exercise name..."
-          style={styles.searchBar}
+          placeholderTextColor={currentTheme.colors.text}
+          style={[
+            styles.searchBar,
+            { backgroundColor: currentTheme.colors.card },
+          ]}
         />
         <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();
             setSearchQuery('');
           }}
-          style={styles.clearBtn}>
-          <Text style={styles.clearBtnTxt}>Clear Search</Text>
+          style={[
+            styles.clearBtn,
+            { backgroundColor: currentTheme.colors.primary },
+          ]}>
+          <Text
+            style={[
+              styles.clearBtnTxt,
+              { color: currentTheme.colors.notification },
+            ]}>
+            Clear Search
+          </Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -90,7 +109,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   clearBtn: {
-    backgroundColor: '#2e1aa9',
     height: 35,
     borderRadius: 8,
     justifyContent: 'center',
@@ -101,7 +119,6 @@ const styles = StyleSheet.create({
     width: '64%',
     height: 35,
     alignSelf: 'center',
-    backgroundColor: '#fff',
     borderRadius: 8,
     padding: 5,
     marginBottom: 10,
@@ -116,7 +133,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   clearBtnTxt: {
-    color: '#fff',
     fontWeight: '500',
   },
 });

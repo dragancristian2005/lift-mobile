@@ -11,15 +11,20 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTheme } from '../../contexts/theme/theme.context';
 import { KContainer } from '../../components';
 import ImagePickerComponent from '../../components/ImagePickerComponent';
 import { useAuth } from '../../contexts/auth/auth.context';
 import { useUserInfo } from '../../hooks/api/useUserInfo';
 import { UserInfo } from '../../types/user/UserInfo.types';
 import { useSetUserInfo } from '../../hooks/api/setUserInfo';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const SettingsScreen = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkTheme, setIsDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const [modifiedUserInfo, setModifiedUserInfo] = useState<UserInfo>({
     weight: '',
     bodyFat: '',
@@ -31,7 +36,7 @@ const SettingsScreen = () => {
   const mutation = useSetUserInfo();
   const queryClient = useQueryClient();
 
-  const toggleSwitch = () => setIsDarkMode(previousState => !previousState);
+  const toggleSwitch = async () => setIsDarkTheme();
 
   const { data, isPending, isError } = useUserInfo();
 
@@ -79,21 +84,43 @@ const SettingsScreen = () => {
           contentContainerStyle={{ alignItems: 'center', paddingBottom: 100 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Settings</Text>
+          <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+            Settings
+          </Text>
           <ImagePickerComponent />
-          <Text style={styles.greeting}>Hello, {data?.username}</Text>
+          <Text style={[styles.greeting, { color: currentTheme.colors.text }]}>
+            Hello, {data?.username}
+          </Text>
           <View style={styles.options}>
-            <View style={styles.optionBtn}>
-              <Text style={styles.optionBtnTxt}>Theme</Text>
+            <View
+              style={[
+                styles.optionBtn,
+                { borderColor: currentTheme.colors.primary },
+              ]}>
+              <Text
+                style={[
+                  styles.optionBtnTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Theme
+              </Text>
               <Switch
-                value={isDarkMode}
+                value={isDarkTheme}
                 onValueChange={toggleSwitch}
-                thumbColor={isDarkMode ? '#2e1aa9' : '#f4f3f4'}
+                thumbColor={
+                  isDarkTheme ? currentTheme.colors.primary : '#f4f3f4'
+                }
                 trackColor={{ false: '#767577', true: '#363636' }}
               />
             </View>
             <View style={styles.userInfoContainer}>
-              <Text style={styles.userInfoTxt}>Weight</Text>
+              <Text
+                style={[
+                  styles.userInfoTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Weight
+              </Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.weight}
@@ -104,14 +131,32 @@ const SettingsScreen = () => {
                     }))
                   }
                   keyboardType="numeric"
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    {
+                      color: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
+                    },
+                  ]}
                   onBlur={handleSave}
                 />
-                <Text style={styles.unitText}>kg</Text>
+                <Text
+                  style={[
+                    styles.unitText,
+                    { color: currentTheme.colors.text },
+                  ]}>
+                  kg
+                </Text>
               </View>
             </View>
             <View style={styles.userInfoContainer}>
-              <Text style={styles.userInfoTxt}>Body Fat</Text>
+              <Text
+                style={[
+                  styles.userInfoTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Body Fat
+              </Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.bodyFat}
@@ -122,14 +167,32 @@ const SettingsScreen = () => {
                     }))
                   }
                   keyboardType="numeric"
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    {
+                      color: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
+                    },
+                  ]}
                   onBlur={handleSave}
                 />
-                <Text style={styles.unitText}>%</Text>
+                <Text
+                  style={[
+                    styles.unitText,
+                    { color: currentTheme.colors.text },
+                  ]}>
+                  %
+                </Text>
               </View>
             </View>
             <View style={styles.userInfoContainer}>
-              <Text style={styles.userInfoTxt}>Goal Weight</Text>
+              <Text
+                style={[
+                  styles.userInfoTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Goal Weight
+              </Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.goalWeight}
@@ -140,14 +203,32 @@ const SettingsScreen = () => {
                     }))
                   }
                   keyboardType="numeric"
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    {
+                      color: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
+                    },
+                  ]}
                   onBlur={handleSave}
                 />
-                <Text style={styles.unitText}>kg</Text>
+                <Text
+                  style={[
+                    styles.unitText,
+                    { color: currentTheme.colors.text },
+                  ]}>
+                  kg
+                </Text>
               </View>
             </View>
             <View style={styles.userInfoContainer}>
-              <Text style={styles.userInfoTxt}>Goal Body Fat</Text>
+              <Text
+                style={[
+                  styles.userInfoTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Goal Body Fat
+              </Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   value={modifiedUserInfo.goalBodyFat}
@@ -158,14 +239,37 @@ const SettingsScreen = () => {
                     }))
                   }
                   keyboardType="numeric"
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    {
+                      color: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
+                    },
+                  ]}
                   onBlur={handleSave}
                 />
-                <Text style={styles.unitText}>%</Text>
+                <Text
+                  style={[
+                    styles.unitText,
+                    { color: currentTheme.colors.text },
+                  ]}>
+                  %
+                </Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.optionBtn} onPress={signOut}>
-              <Text style={styles.optionBtnTxt}>Log Out</Text>
+            <TouchableOpacity
+              style={[
+                styles.optionBtn,
+                { borderColor: currentTheme.colors.primary },
+              ]}
+              onPress={signOut}>
+              <Text
+                style={[
+                  styles.optionBtnTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Log Out
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -193,7 +297,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderTopWidth: 2,
     borderBottomWidth: 2,
-    borderColor: '#2e1aa9',
     marginBottom: 12,
     marginTop: 12,
   },
@@ -212,7 +315,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 8,
     padding: 5,
-    backgroundColor: '#f4f3f4',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -225,15 +327,6 @@ const styles = StyleSheet.create({
   unitText: {
     marginLeft: 5,
     fontSize: 18,
-  },
-  saveBtn: {
-    width: '35%',
-    padding: 10,
-    backgroundColor: '#2e1aa9',
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderRadius: 8,
-    marginVertical: 10,
   },
   userInfoContainer: {
     flexDirection: 'row',

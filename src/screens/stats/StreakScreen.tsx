@@ -11,8 +11,14 @@ import { useWeekStreak } from '../../hooks/api/useWeekStreak';
 import KStreak from '../../components/KStreak';
 import KGoals from '../../components/KGoals';
 import KIntake from '../../components/KIntake';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const StreakScreen = () => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { data, isError, isPending } = useWeekStreak();
 
   const streakCount = useMemo(
@@ -26,20 +32,26 @@ const StreakScreen = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{ alignItems: 'center' }}
         showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Streak</Text>
+        <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+          Streak
+        </Text>
         {isError ? (
           <Text>There was an error fetching this week&#39;s streak</Text>
         ) : isPending ? (
-          <ActivityIndicator color="#2e1aa9" />
+          <ActivityIndicator color={currentTheme.colors.primary} />
         ) : (
           <KStreak data={data} streakCount={streakCount} />
         )}
         <View style={styles.goalsContainer}>
-          <Text style={styles.subtitle}>Goals</Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Goals
+          </Text>
           <KGoals />
         </View>
         <View style={styles.goalsContainer}>
-          <Text style={styles.subtitle}>Recommended Calorie Intake</Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Recommended Calorie Intake
+          </Text>
           <KIntake />
         </View>
       </ScrollView>

@@ -14,8 +14,14 @@ import { KContainer } from '../../components';
 import { AuthStackParamList } from '../../types/navigation/AuthStack.types';
 import { useAuth } from '../../contexts/auth/auth.context';
 import { Logo } from '../../components/Logo';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const LoginScreen = () => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { signIn } = useAuth();
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
@@ -41,32 +47,61 @@ const LoginScreen = () => {
     <KContainer>
       <View style={styles.container}>
         <Logo />
-        <Text style={styles.loginTxt}>Let’s get you signed in!</Text>
+        <Text style={[styles.loginTxt, { color: currentTheme.colors.text }]}>
+          Let’s get you signed in!
+        </Text>
         <View style={{ gap: 14, marginBottom: 25 }}>
           <TextInput
             value={username}
             onChangeText={setUsername}
             placeholder="Enter your username: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              {
+                backgroundColor: currentTheme.colors.card,
+                color: currentTheme.colors.text,
+              },
+            ]}
           />
           <TextInput
             value={password}
             onChangeText={setPassword}
             placeholder="Enter your password: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              {
+                backgroundColor: currentTheme.colors.card,
+                color: currentTheme.colors.text,
+              },
+            ]}
             secureTextEntry
           />
         </View>
 
-        <TouchableOpacity onPress={logIn} style={styles.signInBtn}>
-          <Text style={{ color: 'white', fontSize: 16 }}>Sign in</Text>
+        <TouchableOpacity
+          onPress={logIn}
+          style={[
+            styles.signInBtn,
+            { backgroundColor: currentTheme.colors.primary },
+          ]}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: currentTheme.colors.notification,
+            }}>
+            Sign in
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.registerContainer}>
-          <Text style={{ fontSize: 14 }}>Don&#39;t have an account?</Text>
+          <Text style={{ fontSize: 14, color: currentTheme.colors.text }}>
+            Don&#39;t have an account?
+          </Text>
           <TouchableOpacity
             onPress={() => navigation.replace('RegisterScreen')}>
-            <Text style={{ fontSize: 14, color: '#2e1aa9' }}>
+            <Text style={{ fontSize: 14, color: currentTheme.colors.primary }}>
               {' '}
               Create one here
             </Text>
@@ -88,7 +123,6 @@ const styles = StyleSheet.create({
     width: 275,
     borderRadius: 8,
     padding: 10,
-    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -111,7 +145,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signInBtn: {
-    backgroundColor: '#520080',
     height: 40,
     width: 275,
     justifyContent: 'center',

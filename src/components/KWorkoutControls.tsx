@@ -6,23 +6,45 @@ import {
   View,
 } from 'react-native';
 import { KWorkoutControlsProps } from '../types/workout/workout.types';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 export const KWorkoutControls = ({
   search,
   setSearch,
-}: KWorkoutControlsProps) => (
-  <View style={styles.container}>
-    <TextInput
-      value={search}
-      onChangeText={setSearch}
-      style={styles.searchBar}
-      placeholder="Search"
-    />
-    <TouchableOpacity style={styles.clearBtn}>
-      <Text style={styles.clearBtnTxt}>Clear All</Text>
-    </TouchableOpacity>
-  </View>
-);
+}: KWorkoutControlsProps) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        value={search}
+        onChangeText={setSearch}
+        style={[
+          styles.searchBar,
+          { backgroundColor: currentTheme.colors.card },
+        ]}
+        placeholder="Search"
+        placeholderTextColor={currentTheme.colors.text}
+      />
+      <TouchableOpacity
+        style={[
+          styles.clearBtn,
+          { backgroundColor: currentTheme.colors.primary },
+        ]}>
+        <Text
+          style={[
+            styles.clearBtnTxt,
+            { color: currentTheme.colors.notification },
+          ]}>
+          Clear All
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   searchBar: {
@@ -30,7 +52,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
     padding: 10,
-    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -52,14 +73,12 @@ const styles = StyleSheet.create({
   },
   clearBtn: {
     width: '30%',
-    backgroundColor: '#2e1aa9',
     height: '100%',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   clearBtnTxt: {
-    color: '#fff',
     fontSize: 15,
   },
 });

@@ -15,8 +15,14 @@ import { FrontMusclesSvg } from '../../components/svgs/FrontMusclesSvg';
 import { BackMusclesSvg } from '../../components/svgs/BackMusclesSvg';
 import { useWeeklyProgress } from '../../hooks/api/useWeeklyProgress';
 import { useLatestWorkout } from '../../hooks/api/useLatestWorkout';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const HomeScreen = () => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { width } = useWindowDimensions();
   const svgWidth = (width - 16) * 0.4;
   const svgHeight = (svgWidth * 648) / 432;
@@ -31,7 +37,9 @@ const HomeScreen = () => {
   return (
     <KContainer>
       <View style={styles.container}>
-        <Text style={styles.title}>Home</Text>
+        <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+          Home
+        </Text>
         <View style={styles.svgContainer}>
           <ImageBackground
             source={require('../../../photos/GymBackground.png')}
@@ -64,27 +72,56 @@ const HomeScreen = () => {
         </View>
         <TouchableOpacity
           onPress={() => navigation.navigate('CreateWorkoutScreen')}
-          style={styles.newWorkoutBtn}>
-          <View style={styles.newWorkoutContainer}>
-            <Text style={styles.newWorkoutBtnSymbol}>+</Text>
+          style={[
+            styles.newWorkoutBtn,
+            { backgroundColor: currentTheme.colors.card },
+          ]}>
+          <View
+            style={[
+              styles.newWorkoutContainer,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}>
+            <Text
+              style={[
+                styles.newWorkoutBtnSymbol,
+                { color: currentTheme.colors.background },
+              ]}>
+              +
+            </Text>
           </View>
-          <Text style={{ color: '#444' }}>Create new workout</Text>
+          <Text style={{ color: currentTheme.colors.text }}>
+            Create new workout
+          </Text>
         </TouchableOpacity>
         {isError ? (
-          <Text>There was an error fetching latest workout.</Text>
+          <Text style={{ color: currentTheme.colors.text }}>
+            There was an error fetching latest workout.
+          </Text>
         ) : isPending ? (
-          <ActivityIndicator color="#2e1aa9" />
+          <ActivityIndicator color={currentTheme.colors.primary} />
         ) : (
-          <View style={styles.latestWorkoutContainer}>
-            <Text style={{ fontSize: 24 }}>Latest Workout</Text>
+          <View
+            style={[
+              styles.latestWorkoutContainer,
+              { backgroundColor: currentTheme.colors.card },
+            ]}>
+            <Text style={{ fontSize: 24, color: currentTheme.colors.text }}>
+              Latest Workout
+            </Text>
             <View style={styles.latestWorkoutInfo}>
-              <Text style={{ fontSize: 20 }}>{data.name}</Text>
+              <Text style={{ fontSize: 20, color: currentTheme.colors.text }}>
+                {data.name}
+              </Text>
               <View style={styles.outerMarkContainer}>
-                <View style={styles.innerMarkContainer}>
+                <View
+                  style={[
+                    styles.innerMarkContainer,
+                    { backgroundColor: currentTheme.colors.card },
+                  ]}>
                   <Text style={{ fontSize: 30, color: 'green' }}>✓</Text>
                 </View>
               </View>
-              <Text style={{ fontSize: 18, color: '#444' }}>
+              <Text style={{ fontSize: 18, color: currentTheme.colors.text }}>
                 {latestWorkoutDate}
               </Text>
             </View>
@@ -107,14 +144,12 @@ const styles = StyleSheet.create({
   newWorkoutBtn: {
     width: '100%',
     height: '12%',
-    backgroundColor: '#dddddd',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 5,
   },
   newWorkoutContainer: {
-    backgroundColor: '#2e1aa9',
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
@@ -122,7 +157,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   newWorkoutBtnSymbol: {
-    color: '#fff',
     fontSize: 34,
     lineHeight: 36,
   },
@@ -140,7 +174,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   latestWorkoutContainer: {
-    backgroundColor: '#dddddd',
     width: '100%',
     height: '25%',
     padding: 10,
@@ -163,7 +196,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerMarkContainer: {
-    backgroundColor: '#dddddd',
     width: 42,
     height: 42,
     borderRadius: 42 / 2,

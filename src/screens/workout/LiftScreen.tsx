@@ -7,9 +7,15 @@ import KWorkout from '../../components/KWorkout';
 import { KWorkoutControls } from '../../components/KWorkoutControls';
 import { useWorkouts } from '../../hooks/api/useWorkouts';
 import { useAuth } from '../../contexts/auth/auth.context';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const LiftScreen = () => {
   const navigation = useNavigation<NavigationProp<MainStackParamList>>();
+
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
 
   const [search, setSearch] = useState('');
   const { signIn } = useAuth();
@@ -42,10 +48,14 @@ const LiftScreen = () => {
   return (
     <KContainer>
       <View style={styles.container}>
-        <Text style={styles.title}>Workouts</Text>
+        <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+          Workouts
+        </Text>
         <KWorkoutControls search={search} setSearch={setSearch} />
         {filteredWorkouts.length === 0 ? (
-          <Text>No workouts available.</Text>
+          <Text style={{ color: currentTheme.colors.text }}>
+            No workouts available.
+          </Text>
         ) : (
           <FlatList
             data={filteredWorkouts}

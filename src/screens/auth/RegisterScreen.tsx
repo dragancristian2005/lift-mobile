@@ -13,8 +13,14 @@ import { KContainer } from '../../components';
 import { AuthStackParamList } from '../../types/navigation/AuthStack.types';
 import { Logo } from '../../components/Logo';
 import { useAuth } from '../../contexts/auth/auth.context';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const RegisterScreen = () => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { signIn } = useAuth();
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
@@ -45,13 +51,19 @@ const RegisterScreen = () => {
     <KContainer>
       <View style={styles.container}>
         <Logo />
-        <Text style={styles.registerTxt}>Let’s Get You Started!</Text>
+        <Text style={[styles.registerTxt, { color: currentTheme.colors.text }]}>
+          Let’s Get You Started!
+        </Text>
         <View style={{ gap: 14, marginBottom: 25 }}>
           <TextInput
             value={email}
             onChangeText={setEmail}
             placeholder="Enter your email: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              { backgroundColor: currentTheme.colors.card },
+            ]}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -59,32 +71,60 @@ const RegisterScreen = () => {
             value={username}
             onChangeText={setUsername}
             placeholder="Enter your username: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              { backgroundColor: currentTheme.colors.card },
+            ]}
           />
           <TextInput
             value={password}
             onChangeText={setPassword}
             placeholder="Enter your password: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              { backgroundColor: currentTheme.colors.card },
+            ]}
             secureTextEntry
           />
           <TextInput
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             placeholder="Confirm password: "
-            style={styles.input}
+            placeholderTextColor={currentTheme.colors.border}
+            style={[
+              styles.input,
+              { backgroundColor: currentTheme.colors.card },
+            ]}
             secureTextEntry
           />
         </View>
 
-        <TouchableOpacity style={styles.registerBtn} onPress={createAccount}>
-          <Text style={{ color: 'white', fontSize: 16 }}>Register</Text>
+        <TouchableOpacity
+          style={[
+            styles.registerBtn,
+            { backgroundColor: currentTheme.colors.primary },
+          ]}
+          onPress={createAccount}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: currentTheme.colors.notification,
+            }}>
+            Register
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.loginContainer}>
-          <Text style={{ fontSize: 14 }}>Already have an account?</Text>
+          <Text style={{ fontSize: 14, color: currentTheme.colors.text }}>
+            Already have an account?
+          </Text>
           <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-            <Text style={{ fontSize: 14, color: '#2e1aa9' }}> Log in here</Text>
+            <Text style={{ fontSize: 14, color: currentTheme.colors.primary }}>
+              {' '}
+              Log in here
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -103,7 +143,6 @@ const styles = StyleSheet.create({
     width: 275,
     borderRadius: 8,
     padding: 10,
-    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -121,7 +160,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   registerBtn: {
-    backgroundColor: '#520080',
     height: 40,
     width: 275,
     justifyContent: 'center',

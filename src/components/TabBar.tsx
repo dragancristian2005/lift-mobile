@@ -4,12 +4,18 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 export const TabBar = ({
   state,
   descriptors,
   navigation,
 }: BottomTabBarProps) => {
+  const { isDarkTheme } = useTheme();
+
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
   const { buildHref } = useLinkBuilder();
 
   const icon: Record<string, (props: any) => JSX.Element> = {
@@ -33,7 +39,14 @@ export const TabBar = ({
   };
 
   return (
-    <View style={styles.tabBar}>
+    <View
+      style={[
+        styles.tabBar,
+        {
+          backgroundColor: currentTheme.colors.background,
+          shadowColor: currentTheme.colors.border,
+        },
+      ]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -80,8 +93,23 @@ export const TabBar = ({
             onPress={onPress}
             onLongPress={onLongPress}
             style={styles.tabBarItem}>
-            <IconComponent color={isFocused ? '#2e1aa9' : '#222'} />
-            <Text style={{ color: isFocused ? '#2e1aa9' : '#222' }}>
+            <IconComponent
+              color={
+                isFocused
+                  ? currentTheme.colors.primary
+                  : currentTheme.dark
+                    ? currentTheme.colors.text
+                    : '#222'
+              }
+            />
+            <Text
+              style={{
+                color: isFocused
+                  ? currentTheme.colors.primary
+                  : currentTheme.dark
+                    ? currentTheme.colors.text
+                    : '#222',
+              }}>
               {label}
             </Text>
           </PlatformPressable>
@@ -98,17 +126,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
     marginHorizontal: 30,
     paddingVertical: 15,
     borderRadius: 35,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    shadowOpacity: 0.18,
+    shadowRadius: 2.25,
 
     elevation: 4,
   },

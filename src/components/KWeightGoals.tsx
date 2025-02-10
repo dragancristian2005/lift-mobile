@@ -1,6 +1,9 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { UserInfo } from '../types/user/UserInfo.types';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 const KWeightGoals = ({
   modifiedUserInfo,
@@ -13,6 +16,9 @@ const KWeightGoals = ({
   handleSave: () => void;
   savedUserInfo: UserInfo;
 }) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const weight = Number(savedUserInfo.weight);
   const goalWeight = Number(savedUserInfo.goalWeight);
 
@@ -24,8 +30,12 @@ const KWeightGoals = ({
   return (
     <View style={{ width: '100%', alignItems: 'center' }}>
       <View style={styles.headerContainer}>
-        <Text style={styles.label}>Weight</Text>
-        <Text style={styles.label}>Goal Weight</Text>
+        <Text style={[styles.label, { color: currentTheme.colors.text }]}>
+          Weight
+        </Text>
+        <Text style={[styles.label, { color: currentTheme.colors.text }]}>
+          Goal Weight
+        </Text>
       </View>
       <View style={styles.weightContainer}>
         <View style={styles.unitContainer}>
@@ -38,17 +48,26 @@ const KWeightGoals = ({
               }))
             }
             keyboardType="numeric"
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                backgroundColor: currentTheme.colors.card,
+                color: currentTheme.colors.text,
+              },
+            ]}
             onBlur={handleSave}
           />
-          <Text style={{ marginHorizontal: 5 }}>kg</Text>
+          <Text
+            style={{ marginHorizontal: 5, color: currentTheme.colors.text }}>
+            kg
+          </Text>
         </View>
         {safeProgress > 0 && (
           <Progress.Bar
             progress={safeProgress}
             width={225}
             height={15}
-            color="#2e1aa9"
+            color={currentTheme.colors.primary}
           />
         )}
         <View style={styles.unitContainer}>
@@ -61,10 +80,19 @@ const KWeightGoals = ({
               }))
             }
             keyboardType="numeric"
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                backgroundColor: currentTheme.colors.card,
+                color: currentTheme.colors.text,
+              },
+            ]}
             onBlur={handleSave}
           />
-          <Text style={{ marginHorizontal: 5 }}>%</Text>
+          <Text
+            style={{ marginHorizontal: 5, color: currentTheme.colors.text }}>
+            %
+          </Text>
         </View>
       </View>
     </View>
@@ -93,7 +121,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 8,
     padding: 5,
-    backgroundColor: '#f4f3f4',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

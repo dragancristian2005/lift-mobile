@@ -14,10 +14,16 @@ import { CreateWorkoutScreenProps } from '../../types/workout/workout.types';
 import { AddedExercise } from '../../types/exercise/Exercise.types';
 import KAddedExercisesList from '../../components/KAddedExercisesList';
 import { useSetCreateWorkout } from '../../hooks/api/setCreateWorkout';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   navigation,
 }) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const queryClient = useQueryClient();
   const [workoutName, setWorkoutName] = useState('');
   const [workoutExercises, setWorkoutExercises] = useState<AddedExercise[]>([]);
@@ -70,30 +76,57 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
   return (
     <KContainer>
       <View style={styles.container}>
-        <Text style={styles.title}>New Workout</Text>
+        <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+          New Workout
+        </Text>
         <View style={styles.inputContainer}>
-          <Text style={{ fontSize: 20, color: '#444' }}>Workout Name: </Text>
+          <Text style={{ fontSize: 20, color: currentTheme.colors.text }}>
+            Workout Name:{' '}
+          </Text>
           <TextInput
             value={workoutName}
             onChangeText={setWorkoutName}
             placeholder="Enter workout name..."
+            placeholderTextColor={currentTheme.colors.text}
             style={styles.nameInput}
           />
         </View>
         <View style={styles.controls}>
-          <TouchableOpacity style={styles.createBtn} onPress={handleCreate}>
-            <Text style={styles.createBtnTxt}>Finish Workout</Text>
+          <TouchableOpacity
+            style={[
+              styles.createBtn,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}
+            onPress={handleCreate}>
+            <Text
+              style={[
+                styles.createBtnTxt,
+                { color: currentTheme.colors.notification },
+              ]}>
+              Finish Workout
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.clearBtn}
+            style={[
+              styles.clearBtn,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}
             onPress={() => setWorkoutExercises([])}>
-            <Text style={styles.clearBtnTxt}>Clear</Text>
+            <Text
+              style={[
+                styles.clearBtnTxt,
+                { color: currentTheme.colors.notification },
+              ]}>
+              Clear
+            </Text>
           </TouchableOpacity>
         </View>
-        <Text style={{ fontSize: 18, color: '#444' }}>
+        <Text style={{ fontSize: 18, color: currentTheme.colors.text }}>
           Duration: {workoutDuration}
         </Text>
-        <Text style={styles.subtitle}>Workout Exercises: </Text>
+        <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+          Workout Exercises:{' '}
+        </Text>
         <View style={{ width: '100%', gap: 15 }}>
           <TouchableOpacity
             onPress={() =>
@@ -102,16 +135,33 @@ const CreateWorkoutScreen: React.FC<CreateWorkoutScreenProps> = ({
                 setWorkoutExercises,
               })
             }
-            style={styles.addExerciseBtn}>
-            <View style={styles.addExerciseTxtContainer}>
-              <Text style={styles.addExerciseTxt}>+</Text>
+            style={[
+              styles.addExerciseBtn,
+              { backgroundColor: currentTheme.colors.card },
+            ]}>
+            <View
+              style={[
+                styles.addExerciseTxtContainer,
+                { backgroundColor: currentTheme.colors.background },
+              ]}>
+              <Text
+                style={[
+                  styles.addExerciseTxt,
+                  { color: currentTheme.colors.primary },
+                ]}>
+                +
+              </Text>
             </View>
-            <Text style={{ fontSize: 14, color: '#666' }}>Add Exercise</Text>
+            <Text style={{ fontSize: 14, color: currentTheme.colors.text }}>
+              Add Exercise
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ width: '100%', maxHeight: '60%' }}>
           {workoutExercises.length === 0 ? (
-            <Text>There are no exercises in your workout.</Text>
+            <Text style={{ color: currentTheme.colors.text }}>
+              There are no exercises in your workout.
+            </Text>
           ) : (
             <FlatList
               data={workoutExercises}
@@ -164,30 +214,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   clearBtn: {
-    backgroundColor: '#2e1aa9',
     width: '20%',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   clearBtnTxt: {
-    color: '#fff',
     fontWeight: '500',
   },
   createBtn: {
-    backgroundColor: '#2e1aa9',
     width: '80%',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
   createBtnTxt: {
-    color: '#fff',
     fontWeight: '500',
   },
   addExerciseBtn: {
     width: '100%',
-    backgroundColor: '#dddddd',
     height: 70,
     borderRadius: 8,
     justifyContent: 'center',
@@ -195,7 +240,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   addExerciseTxtContainer: {
-    backgroundColor: '#fff',
     width: 40,
     height: 40,
     borderRadius: 40 / 2,
@@ -205,7 +249,6 @@ const styles = StyleSheet.create({
   addExerciseTxt: {
     fontSize: 40,
     lineHeight: 42,
-    color: '#2e1aa9',
   },
 });
 

@@ -7,9 +7,15 @@ import { useSetUserInfo } from '../hooks/api/setUserInfo';
 import { convertToNumeric, convertToString } from '../utility/userInfoUtils';
 import KWeightGoals from './KWeightGoals';
 import KBodyFatGoals from './KBodyFatGoals';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 const KGoals = () => {
   const { data, isPending, isError } = useUserInfo();
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const mutation = useSetUserInfo();
   const queryClient = useQueryClient();
 
@@ -48,7 +54,7 @@ const KGoals = () => {
   return isError ? (
     <Text>There was an error fetching goals data.</Text>
   ) : isPending ? (
-    <ActivityIndicator color="#2a1ee9" />
+    <ActivityIndicator color={currentTheme.colors.primary} />
   ) : (
     <View style={styles.container}>
       <KWeightGoals

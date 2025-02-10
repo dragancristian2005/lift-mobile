@@ -8,8 +8,13 @@ import {
 import { useMemo, useState } from 'react';
 import PieChart from 'react-native-pie-chart';
 import { useUserInfo } from '../hooks/api/useUserInfo';
+import { useTheme } from '../contexts/theme/theme.context';
+import DarkTheme from '../theme/DarkTheme';
+import LightTheme from '../theme/LightTheme';
 
 const KIntake = () => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
   const { data, isError, isPending } = useUserInfo();
   const [option, setOption] = useState<'lose' | 'maintain' | 'gain'>(
     'maintain'
@@ -78,27 +83,44 @@ const KIntake = () => {
   }, [calorieIntake, option]);
 
   return isError ? (
-    <Text>There was an error fetching user data.</Text>
+    <Text style={{ color: currentTheme.colors.text }}>
+      There was an error fetching user data.
+    </Text>
   ) : isPending ? (
-    <ActivityIndicator color="#2a1ee9" />
+    <ActivityIndicator color={currentTheme.colors.primary} />
   ) : (
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <View style={styles.info}>
-          <Text style={styles.subtitle}>Height</Text>
-          <Text style={styles.miniTitle}>{data.height}cm</Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Height
+          </Text>
+          <Text
+            style={[styles.miniTitle, { color: currentTheme.colors.border }]}>
+            {data.height}cm
+          </Text>
         </View>
         <View style={styles.info}>
-          <Text style={styles.subtitle}>Weight</Text>
-          <Text style={styles.miniTitle}>{data.weight}kg</Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Weight
+          </Text>
+          <Text
+            style={[styles.miniTitle, { color: currentTheme.colors.border }]}>
+            {data.weight}kg
+          </Text>
         </View>
         <View style={styles.info}>
-          <Text style={styles.subtitle}>Body Fat</Text>
-          <Text style={styles.miniTitle}>{data.bodyFat}%</Text>
+          <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+            Body Fat
+          </Text>
+          <Text
+            style={[styles.miniTitle, { color: currentTheme.colors.border }]}>
+            {data.bodyFat}%
+          </Text>
         </View>
       </View>
       <View style={styles.nutritionContainer}>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
           Goal: {option.charAt(0).toUpperCase() + option.slice(1)}
         </Text>
         <View
@@ -109,21 +131,56 @@ const KIntake = () => {
           }}>
           <TouchableOpacity
             onPress={() => setOption('lose')}
-            style={styles.selectBtn}>
-            <Text style={styles.whiteMiniTitle}>Lose</Text>
+            style={[
+              styles.selectBtn,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}>
+            <Text
+              style={[
+                styles.miniTitle,
+                isDarkTheme
+                  ? { color: currentTheme.colors.text }
+                  : { color: currentTheme.colors.notification },
+              ]}>
+              Lose
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setOption('maintain')}
-            style={styles.selectBtn}>
-            <Text style={styles.whiteMiniTitle}>Maintain</Text>
+            style={[
+              styles.selectBtn,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}>
+            <Text
+              style={[
+                styles.miniTitle,
+                isDarkTheme
+                  ? { color: currentTheme.colors.text }
+                  : { color: currentTheme.colors.notification },
+              ]}>
+              Maintain
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setOption('gain')}
-            style={styles.selectBtn}>
-            <Text style={styles.whiteMiniTitle}>Gain</Text>
+            style={[
+              styles.selectBtn,
+              { backgroundColor: currentTheme.colors.primary },
+            ]}>
+            <Text
+              style={[
+                styles.miniTitle,
+                isDarkTheme
+                  ? { color: currentTheme.colors.text }
+                  : { color: currentTheme.colors.notification },
+              ]}>
+              Gain
+            </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.subtitle}>Calorie Intake: {calorieIntake}</Text>
+        <Text style={[styles.subtitle, { color: currentTheme.colors.text }]}>
+          Calorie Intake: {calorieIntake}
+        </Text>
         <View style={styles.macros}>
           {macros && (
             <PieChart
@@ -133,7 +190,7 @@ const KIntake = () => {
                 { value: macros.fatGrams, color: '#c1b5ff' },
                 { value: macros.proteinGrams, color: '#7c6aff' },
               ]}
-              cover={{ radius: 0.7, color: 'white' }}
+              cover={{ radius: 0.7, color: currentTheme.colors.background }}
             />
           )}
           <View
@@ -151,7 +208,8 @@ const KIntake = () => {
                   borderRadius: 20 / 2,
                 }}
               />
-              <Text style={styles.miniTitle}>
+              <Text
+                style={[styles.miniTitle, { color: currentTheme.colors.text }]}>
                 Protein: {macros?.proteinGrams}g
               </Text>
             </View>
@@ -164,7 +222,10 @@ const KIntake = () => {
                   borderRadius: 20 / 2,
                 }}
               />
-              <Text style={styles.miniTitle}>Carbs: {macros?.carbGrams}g</Text>
+              <Text
+                style={[styles.miniTitle, { color: currentTheme.colors.text }]}>
+                Carbs: {macros?.carbGrams}g
+              </Text>
             </View>
             <View style={styles.macrosContainer}>
               <View
@@ -175,7 +236,10 @@ const KIntake = () => {
                   borderRadius: 20 / 2,
                 }}
               />
-              <Text style={styles.miniTitle}>Fats: {macros?.fatGrams}g</Text>
+              <Text
+                style={[styles.miniTitle, { color: currentTheme.colors.text }]}>
+                Fats: {macros?.fatGrams}g
+              </Text>
             </View>
           </View>
         </View>
@@ -197,13 +261,13 @@ const styles = StyleSheet.create({
   },
   info: {
     alignItems: 'center',
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 22,
   },
   miniTitle: {
     fontSize: 18,
-    color: '#444',
   },
   nutritionContainer: {
     width: '100%',
@@ -213,14 +277,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   selectBtn: {
-    backgroundColor: '#2e1aa9',
     paddingVertical: 6,
     paddingHorizontal: 20,
     borderRadius: 8,
-  },
-  whiteMiniTitle: {
-    color: 'white',
-    fontSize: 18,
   },
   macros: {
     width: '100%',

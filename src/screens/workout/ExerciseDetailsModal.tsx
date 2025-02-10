@@ -8,10 +8,16 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { ExerciseDetailsModalProps } from '../../types/navigation/WorkoutStack.types';
+import { useTheme } from '../../contexts/theme/theme.context';
+import DarkTheme from '../../theme/DarkTheme';
+import LightTheme from '../../theme/LightTheme';
 
 const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
   route,
 }) => {
+  const { isDarkTheme } = useTheme();
+  const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
   const { name, image, difficulty, demonstrationGif, description, type } =
     route.params;
 
@@ -19,21 +25,29 @@ const ExerciseDetailsModal: React.FC<ExerciseDetailsModalProps> = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{name}</Text>
+      <Text style={[styles.title, { color: currentTheme.colors.text }]}>
+        {name}
+      </Text>
       <View
         style={{
           width: '100%',
           gap: 5,
         }}>
-        <Text style={styles.info}>Difficulty: {difficulty}</Text>
-        <Text style={styles.info}>Type: {type}</Text>
+        <Text style={[styles.info, { color: currentTheme.colors.text }]}>
+          Difficulty: {difficulty}
+        </Text>
+        <Text style={[styles.info, { color: currentTheme.colors.text }]}>
+          Type: {type}
+        </Text>
       </View>
       <Image
         source={{ uri: image }}
         style={{ width: '100%', aspectRatio: 3 / 2, borderRadius: 8 }}
         resizeMode="cover"
       />
-      <Text style={styles.info}>{description}</Text>
+      <Text style={[styles.info, { color: currentTheme.colors.text }]}>
+        {description}
+      </Text>
       {loading && <ActivityIndicator size="large" color="#2e1aa9" />}
       <Image
         source={{ uri: demonstrationGif }}
@@ -61,7 +75,6 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 16,
-    color: '#444',
   },
 });
 

@@ -99,6 +99,10 @@ const HomeScreen = () => {
           </Text>
         ) : isPending ? (
           <ActivityIndicator color={currentTheme.colors.primary} />
+        ) : data === '' ? (
+          <Text style={{ color: currentTheme.colors.text, fontSize: 24 }}>
+            You don&#39;t have a latest workout.
+          </Text>
         ) : (
           <View
             style={[

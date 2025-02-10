@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -9,6 +10,7 @@ import { KWorkoutControlsProps } from '../types/workout/workout.types';
 import { useTheme } from '../contexts/theme/theme.context';
 import DarkTheme from '../theme/DarkTheme';
 import LightTheme from '../theme/LightTheme';
+import { useClearWorkouts } from '../hooks/api/useClearWorkouts';
 
 export const KWorkoutControls = ({
   search,
@@ -16,6 +18,27 @@ export const KWorkoutControls = ({
 }: KWorkoutControlsProps) => {
   const { isDarkTheme } = useTheme();
   const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
+
+  const clearWorkoutMutation = useClearWorkouts();
+
+  const handleClearWorkouts = () => {
+    Alert.alert(
+      'Clear All Workouts',
+      'Are you sure you want to clear all workouts?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            clearWorkoutMutation.mutate();
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -36,7 +59,8 @@ export const KWorkoutControls = ({
         style={[
           styles.clearBtn,
           { backgroundColor: currentTheme.colors.primary },
-        ]}>
+        ]}
+        onPress={handleClearWorkouts}>
         <Text
           style={[
             styles.clearBtnTxt,

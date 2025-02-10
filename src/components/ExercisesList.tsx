@@ -49,7 +49,10 @@ const ExercisesList = ({
           placeholderTextColor={currentTheme.colors.text}
           style={[
             styles.searchBar,
-            { backgroundColor: currentTheme.colors.card },
+            {
+              backgroundColor: currentTheme.colors.card,
+              color: currentTheme.colors.text,
+            },
           ]}
         />
         <TouchableOpacity

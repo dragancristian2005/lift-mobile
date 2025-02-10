@@ -1,12 +1,11 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { KContainer } from '../../components';
 import { MainStackParamList } from '../../types/navigation/MainStack.types';
 import KWorkout from '../../components/KWorkout';
 import { KWorkoutControls } from '../../components/KWorkoutControls';
 import { useWorkouts } from '../../hooks/api/useWorkouts';
-import { useAuth } from '../../contexts/auth/auth.context';
 import { useTheme } from '../../contexts/theme/theme.context';
 import DarkTheme from '../../theme/DarkTheme';
 import LightTheme from '../../theme/LightTheme';
@@ -18,7 +17,6 @@ const LiftScreen = () => {
   const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
 
   const [search, setSearch] = useState('');
-  const { signIn } = useAuth();
 
   const workouts = useWorkouts();
 
@@ -30,7 +28,7 @@ const LiftScreen = () => {
 
   const allWorkouts = useMemo(
     () => workouts.data?.pages.flatMap(page => page) || [],
-    [workouts.data?.pages]
+    [workouts]
   );
 
   const filteredWorkouts = useMemo(
@@ -40,10 +38,6 @@ const LiftScreen = () => {
       ),
     [allWorkouts, search]
   );
-
-  useEffect(() => {
-    workouts.refetch();
-  }, [signIn, workouts]);
 
   return (
     <KContainer>

@@ -6,8 +6,10 @@
 <img src="assets/readme/homeScreen.jpg" width="300px">
 
 #### When creating a new workout you will be prompted with a screen where you can input the name of the workout and select exercises, sets, reps and weight.
-<img src="assets/readme/createWorkout.jpg" width="300px">
-<img src="assets/readme/selectExercisesModal.jpg" width="300px">
+<div style="flex-direction:row">
+  <img src="assets/readme/createWorkout.jpg" width="300px">
+  <img src="assets/readme/selectExercisesModal.jpg" width="300px">
+</div>
 
 #### On the LiftScreen you can see all of your past workouts and read information about each of them. Also, if you select one of them you can get a more in depth look into your workouts and exercises.
 <img src="assets/readme/allWorkouts.jpg" width="300">
@@ -22,17 +24,20 @@ https://github.com/user-attachments/assets/cf9e809a-00f0-4878-8554-77654e9d03e6
 <img src="assets/readme/settingsScreen.jpg" width="300">
 
 #### Using the LogIn and Register screen you can create an account or just log in into an existing one with ease.
-<img src="assets/readme/signIn.jpg" width="300">
-<img src="assets/readme/register.jpg" width="300">
-
+<div style="flex-direction:row">
+  <img src="assets/readme/signIn.jpg" width="300">
+  <img src="assets/readme/register.jpg" width="300">
+</div>
 
 #### If the dark theme is not your cup of tea, you can always just switch to light theme.
-<img src="assets/readme/homeScreenLight.jpg" width="300">
-<img src="assets/readme/allWorkoutsLight.jpg" width="300">
-<img src="assets/readme/streakScreenLight.jpg" width="300">
-<img src="assets/readme/settingsScreenLight.jpg" width="300">
-<img src="assets/readme/signInLight.jpg" width="300">
-<img src="assets/readme/registerLight.jpg" width="300">
+<div style="flex-direction:row">
+  <img src="assets/readme/homeScreenLight.jpg" width="300">
+  <img src="assets/readme/allWorkoutsLight.jpg" width="300">
+  <img src="assets/readme/streakScreenLight.jpg" width="300">
+  <img src="assets/readme/settingsScreenLight.jpg" width="300">
+  <img src="assets/readme/signInLight.jpg" width="300">
+  <img src="assets/readme/registerLight.jpg" width="300">
+</div>
 
 ## Tech Stack
 

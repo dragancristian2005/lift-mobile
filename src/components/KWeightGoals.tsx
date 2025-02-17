@@ -91,7 +91,7 @@ const KWeightGoals = ({
           />
           <Text
             style={{ marginHorizontal: 5, color: currentTheme.colors.text }}>
-            %
+            kg
           </Text>
         </View>
       </View>

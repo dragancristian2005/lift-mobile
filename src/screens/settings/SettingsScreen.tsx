@@ -26,6 +26,7 @@ const SettingsScreen = () => {
   const currentTheme = isDarkTheme ? DarkTheme : LightTheme;
 
   const [modifiedUserInfo, setModifiedUserInfo] = useState<UserInfo>({
+    height: '',
     weight: '',
     bodyFat: '',
     goalWeight: '',
@@ -41,6 +42,7 @@ const SettingsScreen = () => {
   const { data, isPending, isError } = useUserInfo();
 
   const prepareUserInfoForMutation = (userInfo: UserInfo) => ({
+    height: userInfo.height === '' ? undefined : Number(userInfo.height),
     weight: userInfo.weight === '' ? undefined : Number(userInfo.weight),
     bodyFat: userInfo.bodyFat === '' ? undefined : Number(userInfo.bodyFat),
     goalWeight:
@@ -60,8 +62,9 @@ const SettingsScreen = () => {
 
   useEffect(() => {
     if (data) {
-      const { weight, bodyFat, goalWeight, goalBodyFat } = data;
+      const { height, weight, bodyFat, goalWeight, goalBodyFat } = data;
       const stringData = {
+        height: height.toString() ?? '',
         weight: weight.toString() ?? '',
         bodyFat: bodyFat.toString() ?? '',
         goalWeight: goalWeight.toString() ?? '',
@@ -102,7 +105,7 @@ const SettingsScreen = () => {
                   styles.optionBtnTxt,
                   { color: currentTheme.colors.text },
                 ]}>
-                Theme
+                Dark theme
               </Text>
               <Switch
                 value={isDarkTheme}
@@ -112,6 +115,42 @@ const SettingsScreen = () => {
                 }
                 trackColor={{ false: '#767577', true: '#363636' }}
               />
+            </View>
+            <View style={styles.userInfoContainer}>
+              <Text
+                style={[
+                  styles.userInfoTxt,
+                  { color: currentTheme.colors.text },
+                ]}>
+                Height
+              </Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={modifiedUserInfo.height}
+                  onChangeText={text =>
+                    setModifiedUserInfo(prev => ({
+                      ...prev,
+                      height: text,
+                    }))
+                  }
+                  keyboardType="numeric"
+                  style={[
+                    styles.input,
+                    {
+                      color: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
+                    },
+                  ]}
+                  onBlur={handleSave}
+                />
+                <Text
+                  style={[
+                    styles.unitText,
+                    { color: currentTheme.colors.text },
+                  ]}>
+                  cm
+                </Text>
+              </View>
             </View>
             <View style={styles.userInfoContainer}>
               <Text
